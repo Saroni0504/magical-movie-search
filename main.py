@@ -1,6 +1,9 @@
+from scraper import create_disney_dataset
+
 
 def main():
-    print("Hello, World!")
+    create_disney_dataset()
+
 
 if __name__ == "__main__":
     main()
