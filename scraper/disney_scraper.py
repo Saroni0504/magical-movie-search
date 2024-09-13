@@ -5,6 +5,7 @@ import time
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 
+from llm.model import movie_summary
 from scraper.constants import (
     BASE_URL,
     DATASET_NAME,
@@ -43,6 +44,7 @@ def create_disney_dataset():
     data = scrape_movie_list(url=f"{BASE_URL}/wiki/List_of_Walt_Disney_Pictures_films")
     
     data["description"] = data["url"].apply(find_plot_paragraphs)
+    data["summary"] = data["description"].apply(movie_summary)
     for header, output_format in MOVIE_INFOBOX_HEADERS:
         column_name = header.lower().replace(" ", "_")
         data[column_name] = data["url"].apply(
