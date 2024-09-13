@@ -4,7 +4,7 @@
 
 This Python application scrapes Disney movie data from Wikipedia, processes the information, and serves it through a Uvicorn app. The app uses the Requests and BeautifulSoup libraries to collect movie data and the OpenAI API to enrich the dataset with a short movie summaries. It also implements a BM25 algorithm as a search engine.
 
-<img src="//upload.wikimedia.org/wikipedia/en/thumb/5/57/Walt_Disney_Pictures_2011_logo.svg/125px-Walt_Disney_Pictures_2011_logo.svg.png" decoding="async" width="125" height="170" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/en/thumb/5/57/Walt_Disney_Pictures_2011_logo.svg/188px-Walt_Disney_Pictures_2011_logo.svg.png 1.5x, //upload.wikimedia.org/wikipedia/en/thumb/5/57/Walt_Disney_Pictures_2011_logo.svg/250px-Walt_Disney_Pictures_2011_logo.svg.png 2x" data-file-width="271" data-file-height="369">
+![Disney Image](image.png)
 
 ## Workflow
 
