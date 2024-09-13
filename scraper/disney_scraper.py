@@ -5,28 +5,28 @@ import time
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 
-from constants import (
+from scraper.constants import (
     BASE_URL,
     DATASET_NAME,
     MOVIE_INFOBOX_HEADERS,
-    REL_COLUMNS,
+    MOVIE_WIKITABLE_COLUMNS,
 )
 
 
 logging.basicConfig(filename="scraping.log", encoding="utf-8", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-movie_pages = {}
+_movie_pages = {}
 
 
 def get_movie_page(url):
     if not url:
         return
-    global movie_pages
-    if url not in movie_pages:
+    global _movie_pages
+    if url not in _movie_pages:
         soup = scrape_movie_page(url)
-        movie_pages[url] = soup
-    return movie_pages[url]
+        _movie_pages[url] = soup
+    return _movie_pages[url]
 
 
 def scrape_movie_page(url: str) -> BeautifulSoup:
@@ -68,7 +68,7 @@ def parse_wikitables(movie_tables: BeautifulSoup) -> list[dict]:
     for table in movie_tables:
         table_headers = table.find_all("tr")[0].find_all("th")
         table_headers_parsed = [th.text.strip() for th in table_headers]
-        if table_headers_parsed == REL_COLUMNS:
+        if table_headers_parsed == MOVIE_WIKITABLE_COLUMNS:
             rows = table.find_all("tr")[1:]
             for row in rows:
                 row_data = parse_row_data(row_td=row.find_all("td")) 
@@ -78,11 +78,11 @@ def parse_wikitables(movie_tables: BeautifulSoup) -> list[dict]:
 
 def parse_row_data(row_td: list[BeautifulSoup]) -> dict:
     row_data = {}
-    for key, value in zip(REL_COLUMNS, row_td):
+    for key, value in zip(MOVIE_WIKITABLE_COLUMNS, row_td):
         column_name = key.lower().replace(" ", "_")
         row_data[column_name] = value.text.strip()
         # Create additional column of url
-        if key == REL_COLUMNS[1]:  # Title column
+        if key == MOVIE_WIKITABLE_COLUMNS[1]:  # Title column
             anchor = value.find("a")
             row_data["url"] = BASE_URL + anchor["href"] if anchor else ""
     return row_data
