@@ -9,16 +9,30 @@ from utils import (
 app = FastAPI()
 
 
-@app.get("/")
-def search_disney_movie(text: str):
+@app.get("/search_disney_movie")
+def search_disney_movie(query: str) -> dict:
     engine = get_search_engine()
-    query_results = engine.search(text)
-    result = topk_documents(query_results)
+    query_results = engine.search(query)
+    result = topk_documents(query_results, k=1)
     if result:
         documents = get_documents()
-        movie_record = documents.loc[documents["url"] == result[0][0]]
-        return movie_record["title"].squeeze()
-    return "Not found"
+        movie_record = documents.loc[documents["title"] == result[0][0]]
+        response = {
+            "result": movie_record["title"].squeeze(),
+            "summary": movie_record["description"].squeeze(),
+        }
+        return response
+    return {"result": "Not found"}
+
+
+@app.get("/get_topk_documents")
+def get_topk_documents(query: str, k: int) -> dict:
+    engine = get_search_engine()
+    query_results = engine.search(query)
+    results = topk_documents(query_results, k=k)
+    if results:
+        return {"result": results}
+    return {"result": "Not found"}
 
 
 @app.get("/status")
