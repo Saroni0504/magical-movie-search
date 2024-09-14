@@ -1,21 +1,22 @@
-import logging
-import requests
 import time
 
-from bs4 import BeautifulSoup
-from pandas import DataFrame
+import requests
 
-from llm.model import movie_summary
-from scraper.constants import (
-    BASE_URL,
-    DATASET_NAME,
-    MOVIE_INFOBOX_HEADERS,
-    MOVIE_WIKITABLE_COLUMNS,
+from bs4 import BeautifulSoup
+from pandas import (
+    DataFrame,
 )
 
+from data.logger import logger
+from data.constants import (
+    BASE_URL,
+    DATASET_NAME,
+    DATASET_PATH,
+    MOVIE_INFOBOX_HEADERS,
+    WIKITABLE_MOVIE_COLUMNS,
+    WIKITABLE_REQUIRED_MOVIE_COLUMNS,
+)
 
-logging.basicConfig(filename="scraping.log", encoding="utf-8", level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 _movie_pages = {}
 
@@ -30,21 +31,16 @@ def get_movie_page(url):
     return _movie_pages[url]
 
 
-def scrape_movie_page(url: str) -> BeautifulSoup:
-    logger.info(f"Scraping url: {url}")
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    time.sleep(1)  # Throttling 1 request per second
-    return soup
-
-
-def create_disney_dataset():
+def create_disney_dataset(records_limit=1_000):
     logger.info("Starting flow")
-    # TODO: measure execution time with a measure_time decorator (optional)
+
     data = scrape_movie_list(url=f"{BASE_URL}/wiki/List_of_Walt_Disney_Pictures_films")
-    
+    data = data.tail(records_limit)
+
+    # Find the plot paragraphs
     data["description"] = data["url"].apply(find_plot_paragraphs)
-    data["summary"] = data["description"].apply(movie_summary)
+    data = data.dropna(subset=["description"])
+    # Extract infobox data
     for header, output_format in MOVIE_INFOBOX_HEADERS:
         column_name = header.lower().replace(" ", "_")
         data[column_name] = data["url"].apply(
@@ -52,8 +48,16 @@ def create_disney_dataset():
             header=header,
             output_format=output_format,
         )
-    
-    data.to_csv(f"{DATASET_NAME}.csv", index=False)
+    data["title"] = data["title"].str.rstrip("‡†* §")
+    data.to_csv(f"{DATASET_PATH}/{DATASET_NAME}_scrape.csv", index=False)
+
+
+def scrape_movie_page(url: str) -> BeautifulSoup:
+    logger.info(f"Scraping url: {url}")
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    time.sleep(1)  # Throttling 1 request per second
+    return soup
 
 
 def scrape_movie_list(url: str) -> DataFrame:
@@ -65,12 +69,12 @@ def scrape_movie_list(url: str) -> DataFrame:
     
 
 # TODO: handle split cells
-def parse_wikitables(movie_tables: BeautifulSoup) -> list[dict]:
+def parse_wikitables(movie_tables: list[BeautifulSoup]) -> list[dict]:
     movies_data = []
     for table in movie_tables:
         table_headers = table.find_all("tr")[0].find_all("th")
         table_headers_parsed = [th.text.strip() for th in table_headers]
-        if table_headers_parsed == MOVIE_WIKITABLE_COLUMNS:
+        if table_headers_parsed == WIKITABLE_MOVIE_COLUMNS:
             rows = table.find_all("tr")[1:]
             for row in rows:
                 row_data = parse_row_data(row_td=row.find_all("td")) 
@@ -80,11 +84,11 @@ def parse_wikitables(movie_tables: BeautifulSoup) -> list[dict]:
 
 def parse_row_data(row_td: list[BeautifulSoup]) -> dict:
     row_data = {}
-    for key, value in zip(MOVIE_WIKITABLE_COLUMNS, row_td):
+    for key, value in zip(WIKITABLE_REQUIRED_MOVIE_COLUMNS, row_td):
         column_name = key.lower().replace(" ", "_")
         row_data[column_name] = value.text.strip()
         # Create additional column of url
-        if key == MOVIE_WIKITABLE_COLUMNS[1]:  # Title column
+        if key == WIKITABLE_REQUIRED_MOVIE_COLUMNS[1]:  # Title column
             anchor = value.find("a")
             row_data["url"] = BASE_URL + anchor["href"] if anchor else ""
     return row_data
@@ -106,16 +110,16 @@ def find_plot_paragraphs(movie_url, elements_limit=50):
                         break
             return description.strip()
         except Exception as e:
-            print(e)
+            logger.error(f"{movie_url} - {e}")
     return ""
 
 
-def find_infobox_data(movie_url, header, output_format = "str"):
+def find_infobox_data(movie_url, header, output_format="str"):
     soup = get_movie_page(movie_url)
     if soup:
         infobox = soup.find("table", {"class": "infobox"})
         if infobox:
-            row = infobox.find("th", string = header)
+            row = infobox.find("th", string=header)
             if row:
                 row_to_present = row.find_next("td").text.strip()
                 if output_format == "list":
@@ -127,14 +131,15 @@ def find_infobox_data(movie_url, header, output_format = "str"):
             logger.warning(f"{movie_url} - Infobox not found.")
     return ""
 
-def find_infobox_data(movie_url, header, output_format = "str"):
+
+def find_infobox_data(movie_url, header, output_format="str"):
     soup = get_movie_page(movie_url)
     if soup:
         infobox = soup.find("table", {"class": "infobox"})
         if not infobox:
             logger.warning(f"{movie_url} - Infobox not found.")
         else:
-            row = infobox.find("th", string = header)
+            row = infobox.find("th", string=header)
             if not row:
                 logger.warning(f"{movie_url} - {header} not found in the infobox.")
             else:
