@@ -1,4 +1,4 @@
-# Disney Movie Data Scraper
+# Disney Movie Recommender
 
 ## Overview
 
