@@ -118,24 +118,6 @@ def find_infobox_data(movie_url, header, output_format="str"):
     soup = get_movie_page(movie_url)
     if soup:
         infobox = soup.find("table", {"class": "infobox"})
-        if infobox:
-            row = infobox.find("th", string=header)
-            if row:
-                row_to_present = row.find_next("td").text.strip()
-                if output_format == "list":
-                    row_to_present = row_to_present.split("\n")
-                return row_to_present
-            else:
-                logger.warning(f"{movie_url} - {header} not found in the infobox.")
-        else:
-            logger.warning(f"{movie_url} - Infobox not found.")
-    return ""
-
-
-def find_infobox_data(movie_url, header, output_format="str"):
-    soup = get_movie_page(movie_url)
-    if soup:
-        infobox = soup.find("table", {"class": "infobox"})
         if not infobox:
             logger.warning(f"{movie_url} - Infobox not found.")
         else:
