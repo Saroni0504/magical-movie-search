@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Python application scrapes Disney movie data from Wikipedia, processes the information, and serves it through a Uvicorn app. The app uses the Requests and BeautifulSoup libraries to collect movie data and the OpenAI API to enrich the dataset with a short movie summaries. It also implements a BM25 algorithm as a search engine.
+This Python project allows users to search for the most relevant Disney movies using free-text queries. The data module leverages the Requests and BeautifulSoup libraries to scrape Disney movie information from Wikipedia, which is then processed and enhanced with summaries via the OpenAI API. The dataset is indexed using the BM25 algorithm to enable efficient searching and is made accessible through FastAPI endpoints.
 
 ![Disney Image](image.png)
 
@@ -20,9 +20,11 @@ This Python application scrapes Disney movie data from Wikipedia, processes the 
      - Budget
      - Running Time
 
-3. **Generating Summaries**
-   - Utilizing OpenAI API to create summaries of each movie’s plot.
-
+3. **Extracting Additional Information**
+   - Utilizing OpenAI API to extract additional information based on the movie plot such as:
+     - Genre
+     - Tags
+     - Summary
 
 4. **Generating a Dataset**
    - Compile the scraped information and the movie summaries into a structured dataset.
@@ -35,7 +37,7 @@ This Python application scrapes Disney movie data from Wikipedia, processes the 
 - **Method:** `GET`
 - **Parameters:** 
   - `query` (string): The search query (e.g., text query, movie title or keywords)
-- **Response:** JSON object with movie title and summary
+- **Response:** JSON object with movie title, genre, tags and summary
 
 #### `get_topk_documents`
 
@@ -43,38 +45,46 @@ This Python application scrapes Disney movie data from Wikipedia, processes the 
 - **Method:** `GET`
 - **Parameters:** 
   - `k` (integer): The number of top documents to retrieve
-- **Response:** JSON object with top-k movie titles and their scores
+- **Response:** JSON object with top-k movie urls and their scores
 
 
 
 ## Project Structure
 ```
-├── main.py                 # Uvicorn app with endpoints
-├── utils.py                # Helper functions
-├── search_engine.py        # Search Engine BM25 Algorithm
-├── scraper/                # Scraping related files
-│   ├── __init__.py
+├── app/                
+│   ├── main.py                     # Uvicorn app with endpoints
+│   ├── search_engine.py            # Search Engine BM25 Algorithm
+│   └── utils.py
+│
+├── data/
+│   ├── llm/                        # OpenAI API
+│   │   ├── flow.py                 
+│   │   └── model.py                
+│   │
+│   ├── scraper/                    # Scraping related files
+│   │   └── disney_scraper.py
+│   │
+│   ├── main.py
 │   ├── constants.py
-│   ├── disney_scraper.py
-│   └── main.py
-├── data/                   # CSV file with movie data
-│   └── disney_movies.csv
-└── requirements.txt        # Python dependencies
+│   ├── logger.py
+│   └── disney_movies_dataset.csv   # CSV file with movie data
+│
+└── requirements.txt                # Python dependencies
 ```
 
 ## Getting Started
 
 Follow these steps to set up and run the project:
 
-1. **Clone the Repository:**
+1. **Navigate to the Project Directory:**
+   ```bash
+   cd DisneyMovieRecommender
+   ```
+
+2. **Clone the Repository:**
 
    ```bash
    git clone git@github.com:Saroni0504/DisneyMovieRecommender.git
-   ```
-
-2. **Navigate to the Project Directory:**
-   ```bash
-   cd DisneyMovieRecommender
    ```
 
 3. **Create a Virtual Environment:**
@@ -97,22 +107,22 @@ Follow these steps to set up and run the project:
    pip install -r requirements.txt
    ```
 
-6. **Scrape the Wikipedia Pages:**
+6. **Scrape the Wikipedia Pages and extract insights with LLM:**
 <br>Set the OpenAI API key as an environment variable:
     - **macOS/Linux:**
         ```bash
         export OPENAI_API_KEY=your_openai_api_key
-        python scraper/main.py
+        PYTHONPATH=. python data/main.py
         ```
     - **Windows:**
         ```bash
         set OPENAI_API_KEY=your_openai_api_key
-        python scraper/main.py
+        set PYTHONPATH=. python data/main.py
         ```
 
 7. **Run the Uvicorn App:**
    ```bash
-   uvicorn main:app --reload
+   uvicorn app.main:app --reload
    ```
 
 8. **Profit!**
