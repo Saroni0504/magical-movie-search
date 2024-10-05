@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disney Movie Recommender</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Add image at the top -->
+        <img src="/static/images/disney_logo.png" alt="Disney Logo" class="logo">
+
+        <h1>Disney Movie Recommender</h1>
+
+        <!-- Search for a Disney movie -->
+        <div class="search-box">
+            <input type="text" id="searchText" placeholder="Enter text to find a movie">
+            <button onclick="searchMovie()">Search Movies</button>
+        </div>
+        
+        <!-- Carousel for displaying movie results -->
+        <div class="carousel-wrapper">
+            <button class="carousel-control prev" onclick="prevSlide()">❮</button>
+            <div class="carousel" id="carousel"></div>
+            <button class="carousel-control next" onclick="nextSlide()">❯</button>
+        </div>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

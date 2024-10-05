@@ -1,0 +1,162 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #b3cde0, #dec1ff); /* Soft pastel blue to lavender gradient */
+    color: #333;
+    height: 100%; /* Ensure full height */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #444;
+}
+
+.search-box {
+    margin: 20px 0;
+}
+
+/* Align inputs and button for Top Movies in a row */
+.search-box-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-box h2 {
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 60%;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #6fa3ef; /* Light blue button */
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4a90e2; /* Slightly darker blue on hover */
+}
+
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+}
+
+/* Carousel styles */
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.carousel-control.prev {
+    left: 0;
+}
+
+.carousel-control.next {
+    right: 0;
+}
+
+.movie-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.movie-image {
+    width: 100%; /* Adjust width to fill the container */
+    height: auto; /* Keep aspect ratio */
+}
+
+.movie-release {
+    margin-bottom: 20px; /* Adjust the value to control the space */
+}
+
+.movie-genre, .movie-tags {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.movie-summary {
+    margin-top: 10px;
+}
+
+/* New styles for movie presentation */
+.movie-container {
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: flex-start; /* Align items to the start */
+    padding: 20px; /* Padding around the movie container */
+    border-bottom: 1px solid #ddd; /* Divider between movies */
+}
+
+.movie-image-container {
+    flex: 1; /* Take up 1 part of the available space */
+    padding: 0; /* Remove padding inside the image container */
+    border: 3px solid black; /* Change frame color to black */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow */
+    display: flex; /* Use flexbox to center the image */
+    justify-content: center; /* Center horizontally */
+}
+
+.movie-details {
+    flex: 2; /* Take up 2 parts of the available space */
+    padding: 10px; /* Padding inside the details */
+    text-align: left; /* Align text to the left */
+}
