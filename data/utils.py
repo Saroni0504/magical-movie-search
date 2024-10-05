@@ -20,7 +20,7 @@ def retry(func,
           initial_delay: float = 3,
           exponential_base: float = 2,
           jitter: bool = True,
-          max_retries: int = 10,
+          max_retries: int = 3,
           errors: tuple = (requests.RequestException,)
           ):
     def wrapper(*args, **kwargs):
@@ -29,7 +29,7 @@ def retry(func,
             try:
                 return func(*args, **kwargs)
             except errors as e:
-                delay += exponential_base * (1 + jitter * random.random())
+                delay *= exponential_base * (1 + jitter * random.random())
                 logger.warning(f"Warning: {e}. Retrying in {delay:.2f} seconds")
                 time.sleep(delay)
         raise RetryError(message="All Retries Failed", retries=max_retries)
