@@ -51,10 +51,19 @@ This Python project allows users to search for the most relevant Disney movies u
 
 ## Project Structure
 ```
-├── app/                
+├── app/
+│   ├── static/
+│   │   ├── css/
+│   │   ├── js/                
+│   │   └── images/
+│   │
+│   ├── templates/
+│   │   └── index.html
+│   │
 │   ├── main.py                     # Uvicorn app with endpoints
-│   ├── search_engine.py            # Search Engine BM25 Algorithm
-│   └── utils.py
+│   ├── constants.py
+│   ├── utils.py
+|   └── search_engine.py            # Search Engine BM25 Algorithm
 │
 ├── data/
 │   ├── llm/                        # OpenAI API
@@ -67,6 +76,7 @@ This Python project allows users to search for the most relevant Disney movies u
 │   ├── main.py
 │   ├── constants.py
 │   ├── logger.py
+│   ├── utils.py
 │   └── disney_movies_dataset.csv   # CSV file with movie data
 │
 └── requirements.txt                # Python dependencies
@@ -108,17 +118,31 @@ Follow these steps to set up and run the project:
    ```
 
 6. **Scrape the Wikipedia Pages and extract insights with LLM:**
-<br>Set the OpenAI API key as an environment variable:
-    - **macOS/Linux:**
-        ```bash
-        export OPENAI_API_KEY=your_openai_api_key
-        PYTHONPATH=. python data/main.py
-        ```
-    - **Windows:**
-        ```bash
-        set OPENAI_API_KEY=your_openai_api_key
-        set PYTHONPATH=. python data/main.py
-        ```
+
+   There are two options to get the movies data and images:
+   1. Use Git LFS for pulling the dataset and images (install Git LFS):
+      ```
+      git lfs pull
+      ```
+
+   2. Scrape the images and data and extract insights (with OpenAI):
+      <br>Set the environment variables:
+         - **macOS/Linux:**
+            ```bash
+            export SCRAPER_EMAIL_ADDRESS=your_email_address
+            export OPENAI_API_KEY=your_openai_api_key
+            PYTHONPATH=.
+            ```
+         - **Windows:**
+            ```powershell
+            $env:SCRAPER_EMAIL_ADDRESS = "your_email_address"
+            $env:OPENAI_API_KEY = "your_openai_api_key"
+            $env:PYTHONPATH = "."
+            ```
+         Run the program:
+         ```
+         python data/main.py
+         ```
 
 7. **Run the Uvicorn App:**
    ```bash
