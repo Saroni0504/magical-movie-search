@@ -2,8 +2,7 @@ let currentSlide = 0;
 
 async function searchMovie() {
     const searchText = document.getElementById('searchText').value;
-    const carousel = document.getElementById('carousel');
-    carousel.innerHTML = 'Loading movies...';
+
 
     try {
         // Fetch movie results from FastAPI endpoint
@@ -15,7 +14,7 @@ async function searchMovie() {
 
         // Iterate over each movie and create a slide for each
         data.forEach(movie => {
-            const { result, release_year, genre, tags, summary, image_path } = movie;
+            const { title, release_year, genre, tags, summary, image_path } = movie;
 
             // Create a slide div
             const slide = document.createElement('div');
@@ -25,14 +24,14 @@ async function searchMovie() {
             slide.innerHTML = `
                 <div class="movie-container">
                     <div class="movie-details">
-                        <div class="movie-title">${result}</div>
+                        <div class="movie-title">${title}</div>
                         <div class="movie-release-year"><strong>Release Year:</strong> ${release_year}</div>
                         <div class="movie-genre"><strong>Genre:</strong> ${genre.join(', ')}</div>
                         <div class="movie-tags"><strong>Tags:</strong> ${tags.join(', ')}</div>
                         <div class="movie-summary">${summary}</div>
                     </div>
                     <div class="movie-image-container">
-                        <img src="${image_path}" alt="${result}" class="movie-image-path">
+                        <img src="${image_path}" alt="${title}" class="movie-image-path">
                     </div>
                 </div>
             `;
@@ -46,7 +45,7 @@ async function searchMovie() {
         updateCarousel();
 
     } catch (error) {
-        carousel.innerHTML = 'An error occurred: ' + error.message;
+        carousel.innerHTML = 'No results found.';
         console.error('Fetch error:', error);
     }
 }

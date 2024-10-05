@@ -8,6 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from pandas import (
     DataFrame,
+    Series,
 )
 
 from app.constants import IMAGES_PATH
@@ -47,15 +48,28 @@ def create_disney_dataset(records_limit=1_000):
         url=f"{BASE_URL}/wiki/List_of_Walt_Disney_Pictures_films"
     ).tail(records_limit)
 
-    # Download movie image
-    data["image_path"] = data.apply(
-        func=lambda row: get_image(
+    # Extract movie image url and format
+    data[["image_url", "image_format"]] = data["url"].apply(extract_movie_image_url_and_format)
+
+    # Create movie id
+    data["movie_id"] = data.apply(
+        func=lambda row: create_movie_id(
             movie_url=row["url"],
             title=row["title"],
             release_date=row["release_date"],
         ),
         axis=1,
     )
+    # Download movie image
+    data.apply(
+        func=lambda row: download_if_image_not_exists(
+            movie_id=row["movie_id"],
+            image_url=row["image_url"],
+            image_format=row["image_format"],
+        ),
+        axis=1,
+    )
+
     # Find the plot paragraphs
     data["description"] = data["url"].apply(find_plot_paragraphs)
     data = data.dropna(subset=["description"])
@@ -179,7 +193,7 @@ def download_movie_image(image_url: str,
                          image_name: str,
                          image_format: str,
                          image_folder: str,
-                         wait_between_requests_sec=30) -> None:
+                         wait_between_requests_sec=5) -> None:
     logger.info(f"URL: {image_url} -> Downloading image")
     scraper_email_address = os.getenv("SCRAPER_EMAIL_ADDRESS")
     image_response = requests.get(
@@ -203,32 +217,38 @@ def download_movie_image(image_url: str,
         raise requests.RequestException
 
 
-def get_image(movie_url, title, release_date) -> str:
-    image_name = create_movie_id(movie_url=movie_url, title=title, release_date=release_date)
-    image_folder = f"app/{IMAGES_PATH}"
-    image_exists = image_exists_in_dir(image_name=image_name, dir_name=image_folder)
-    logger.info(f"URL: {movie_url} -> Image " + ("" if image_exists else "not ") + "exists")
-    if image_exists:
-        return image_name
-    else:
-        soup = get_movie_page(movie_url)
-        if soup:
-            infobox = soup.find("table", {"class": "infobox"})
-            if not infobox:
-                logger.warning(f"{movie_url} - Infobox not found.")
+def extract_movie_image_url_and_format(movie_url: str) -> Series:
+    soup = get_movie_page(movie_url)
+    if soup:
+        infobox = soup.find("table", {"class": "infobox"})
+        if not infobox:
+            logger.warning(f"{movie_url} - Infobox not found.")
+        else:
+            image = infobox.find("img")
+            if not image:
+                logger.warning(f"{movie_url} - image not found in the infobox.")
             else:
-                image = infobox.find("img")
-                if not image:
-                    logger.warning(f"{movie_url} - image not found in the infobox.")
-                else:
-                    try:
-                        download_movie_image(
-                            image_url="https:" + image["src"],
-                            image_name=image_name,
-                            image_format=image["src"].split(".")[-1],
-                            image_folder=image_folder,
-                        )
-                        return image_name
-                    except RetryError as e:
-                        logger.error(e)
-        return ""
+                image_url = "https:" + image["src"]
+                image_format = image["src"].split(".")[-1]
+                return Series([image_url, image_format])
+    return Series(["", ""])
+
+
+def download_if_image_not_exists(movie_id: str, image_url: str, image_format: str) -> str:
+    if image_url:
+        image_folder = f"app/{IMAGES_PATH}"
+        image_exists = image_exists_in_dir(
+            image_name=movie_id,
+            dir_name=image_folder,
+        )
+        logger.info(f"URL: {image_url} -> image " + ("" if image_exists else "not ") + "exists")
+        if not image_exists:
+            try:
+                download_movie_image(
+                    image_url=image_url,
+                    image_name=movie_id,
+                    image_format=image_format,
+                    image_folder=image_folder,
+                )
+            except RetryError as e:
+                logger.error(e)
