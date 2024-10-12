@@ -167,3 +167,18 @@ button:hover {
     padding: 10px; /* Padding inside the details */
     text-align: left; /* Align text to the left */
 }
+
+/* Add this CSS to control the logo size */
+.logo {
+    max-width: 20%; /* Set a maximum width relative to the container */
+    height: auto; /* Keep the aspect ratio */
+    margin: 0 auto; /* Center the logo horizontally */
+    display: block; /* Ensure it's treated as a block element for centering */
+}
+
+/* Adjustments for mobile responsiveness */
+@media (max-width: 600px) {
+    .logo {
+        max-width: 40%; /* Increase size on smaller screens */
+    }
+}
