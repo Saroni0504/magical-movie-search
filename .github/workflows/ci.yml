@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up Python 3.12.4
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: "3.12.4"
 
@@ -39,7 +39,9 @@ jobs:
       run: |
         mkdir -p $NLTK_DATA
         python -m nltk.downloader -d $NLTK_DATA wordnet
-        
+        python -m nltk.downloader -d $NLTK_DATA stopwords
+        python -m nltk.downloader -d $NLTK_DATA averaged_perceptron_tagger
+
     - name: Test with pytest
       run: |
         pytest
