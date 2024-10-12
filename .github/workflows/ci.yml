@@ -41,7 +41,7 @@ jobs:
         python -c "import nltk"
         python -m nltk.downloader -d $NLTK_DATA wordnet
         python -m nltk.downloader -d $NLTK_DATA stopwords
-        python -m nltk.downloader -d $NLTK_DATA averaged_perceptron_tagger
+        python -m nltk.downloader -d $NLTK_DATA averaged_perceptron_tagger_eng
 
     - name: Test with pytest
       run: |
