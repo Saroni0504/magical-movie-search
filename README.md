@@ -62,6 +62,7 @@ This Python project allows users to search for the most relevant Disney movies u
 │   │
 │   ├── main.py                     # Uvicorn app with endpoints
 │   ├── constants.py
+│   ├── config.py
 │   ├── utils.py
 |   └── search_engine.py            # Search Engine BM25 Algorithm
 │
@@ -78,6 +79,10 @@ This Python project allows users to search for the most relevant Disney movies u
 │   ├── logger.py
 │   ├── utils.py
 │   └── disney_movies_dataset.csv   # CSV file with movie data
+|
+├── tests/
+│   ├── app/
+|   ├── data/
 │
 └── requirements.txt                # Python dependencies
 ```
