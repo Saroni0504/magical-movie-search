@@ -20,6 +20,18 @@
             <input type="text" id="searchText" placeholder="Enter text to find a movie">
             <button onclick="searchMovie()">Search Movies</button>
         </div>
+        <!-- Tags and Show More container -->
+        <div class="tag-wrapper">
+            <div class="tag-container">
+                <!-- Tags will be dynamically generated here -->
+            </div>
+            <div class="tooltip-container">
+                <div class="plus-circle" onclick="showMoreTags()">
+                    +<span class="tooltip">New Ideas<img src="/static/images/icon.png" alt="Icon" class="tooltip-icon"></span>
+                </div>
+            </div>
+        </div>
+
         
         <!-- Carousel for displaying movie results -->
         <div class="carousel-wrapper">

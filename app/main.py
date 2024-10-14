@@ -6,12 +6,15 @@ from fastapi.requests import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+
 from app.config import Config
 from app.utils import (
-    get_search_engine,
-    topk_documents,
+    common_tags,
     fetch_query_results,
-    extract_movies_details,
+    get_documents,
+    get_search_engine,
+    processing_movie_record,
+    topk_documents,
 )
 
 
@@ -46,9 +49,14 @@ async def search_disney_movie(
         query: str,
         k: int = Config.k,
         score_filter: bool = Config.score_filter) -> list[dict]:
-    results = fetch_query_results(query, k, score_filter)
-    if results:
-        response = extract_movies_details(results=results)
+
+    url_list = fetch_query_results(query, k, score_filter)
+    if url_list:
+        documents = get_documents()
+        response = [
+            processing_movie_record(movie_record=documents[documents["url"] == url].squeeze())
+            for url in url_list
+        ]
         return response
     return [{"result": "Not found"}]
 
@@ -61,6 +69,22 @@ async def get_topk_documents(query: str, k: int) -> dict:
     if results:
         return {"result": results}
     return {"result": "Not found"}
+
+
+@app.get("/fetch_common_tags")
+async def fetch_common_tags(n_occurences: int = Config.n_occurences):
+    tags = common_tags(n_occurences=n_occurences)
+    return {"tags": tags}
+
+
+@app.get("/search_by_tag")
+async def search_by_tag(tag: str, k: int = Config.k) -> list[dict]:
+    documents = get_documents()
+    documents = documents[documents["tags"].apply(lambda tag_list: tag.lower() in tag_list)]
+    n_samples = min(k, len(documents))
+    documents_sample = documents.sample(n=n_samples)
+    response = documents_sample.apply(processing_movie_record, axis=1).to_list()
+    return response
 
 
 @app.get("/status")
