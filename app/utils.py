@@ -1,7 +1,6 @@
 from pandas import (
     DataFrame,
     read_csv,
-    Series,
 )
 
 from app.config import Config
@@ -64,15 +63,7 @@ def fetch_query_results(query: str, k: int, score_filter: bool) -> list[tuple]:
     return results
 
 
-def extract_movies_details(urls: list, rel_documents: DataFrame) -> list[dict]:
-    response = []
-    for url in urls:
-        movie_record = rel_documents.loc[rel_documents["url"] == url]
-        response.append(processing_movie_record(movie_record))
-    return response
-
-
-def processing_movie_record(movie_record: Series) -> dict:
+def processing_movie_record(movie_record: dict) -> dict:
     release_date = movie_record["release_date"]
     release_year = release_date.split(",")[1].strip() if "," in release_date else ""
     image_name = (movie_record["movie_id"] + "." + movie_record["image_format"])
