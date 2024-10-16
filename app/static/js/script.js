@@ -15,6 +15,16 @@ async function searchMovie() {
     await fetchMovies(`/search_disney_movie?query=${encodeURIComponent(searchText)}`);
 }
 
+function toggleFilters() {
+    var filtersRow = document.getElementById('filtersRow');
+    if (filtersRow.style.display === "none" || filtersRow.style.display === "") {
+        filtersRow.style.display = "flex"; // You can adjust the display to "block" if needed
+    } else {
+        filtersRow.style.display = "none";
+    }
+}
+
+
 let allTags = [];  // Will store all the tags fetched from the backend
 let currentTagIndex = 0;  // Index to track the current set of tags being displayed
 const TAGS_PER_BATCH = 6;  // Number of tags to show per batch
@@ -54,7 +64,7 @@ function displayTags() {
 
     // Hide the "Show More" button if all tags have been displayed
     if (currentTagIndex >= allTags.length) {
-        document.querySelector('.new-ideas').style.display = 'none';
+        document.querySelector('.plus-circle').style.display = 'none';
     }
 }
 

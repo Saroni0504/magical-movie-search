@@ -15,11 +15,31 @@
 
         <h1>Disney Movie Recommender</h1>
 
-        <!-- Search for a Disney movie -->
         <div class="search-box">
-            <input type="text" id="searchText" placeholder="Enter text to find a movie">
-            <button onclick="searchMovie()">Search Movies</button>
+            <div class="search-box-inline">
+                <input type="text" id="searchText" placeholder="Enter text to find a movie">
+                
+                <!-- Filters button on the right side of the search button -->
+                <div class="tooltip-container">
+                    <div class="filter-button" onclick="toggleFilters()">
+                        <img src="/static/images/filter-icon.png" alt="Icon" class="image-button">
+                        <span class="tooltip filter-tooltip">Filters</span>
+                    </div>
+                </div>
+        
+                <button onclick="searchMovie()">Search Movies</button>
+            </div>
+            
+            <!-- Filters row (initially hidden) -->
+            <div class="filters-row" id="filtersRow">
+                <select id="year" name="year">
+                    <option value="all_years">All years</option>
+                    <option value="past_year">Past year</option>
+                    <option value="past_decade">Past decade</option>
+                </select>
+            </div>
         </div>
+
         <!-- Tags and Show More container -->
         <div class="tag-wrapper">
             <div class="tag-container">
@@ -27,12 +47,11 @@
             </div>
             <div class="tooltip-container">
                 <div class="plus-circle" onclick="showMoreTags()">
-                    +<span class="tooltip">New Ideas<img src="/static/images/icon.png" alt="Icon" class="tooltip-icon"></span>
+                    +<span class="tooltip plus-tooltip">New Ideas<img src="/static/images/new-ideas-icon.png" alt="Icon" class="tooltip-icon"></span>
                 </div>
             </div>
         </div>
 
-        
         <!-- Carousel for displaying movie results -->
         <div class="carousel-wrapper">
             <button class="carousel-control prev" onclick="prevSlide()">❮</button>

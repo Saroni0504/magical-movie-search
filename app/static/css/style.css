@@ -31,6 +31,8 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 4px; /* Add space between elements */
+    margin-bottom: 10px;
 }
 
 .search-box h2 {
@@ -53,11 +55,83 @@ button {
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
+    height: 40px; /* Match button height with input field */
+    margin-left: 2px;
+    
 }
 
 button:hover {
     background-color: #4a90e2; /* Slightly darker blue on hover */
+    transform: scale(1.05);
 }
+
+/* Styles for the filter button */
+.filter-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6fa3ef;
+    padding: 0;
+    margin-left: 1px;
+    border-radius: 5px;
+    height: 40px; /* Match filter button height with input field */
+    width: 30px; /* Keep the filter button square */
+}
+.filter-button img{
+    width: 17px;
+    height: 17px;
+}
+.filter-button:hover {
+    background-color: #4a90e2; /* Slightly darker blue on hover */
+    transform: scale(1.1);
+}
+
+.filter-tooltip{
+    width: 40px; /* Width of the tooltip */
+    padding: 5px; /* Some padding */
+    background-color: #ffffff; /* Dark background */
+    color: #6fa3ef; /* White text */
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center; /* Center the text */
+    border-radius: 5px; /* Rounded corners */
+    position: absolute; /* Absolute positioning */
+    bottom: -70%; 
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+    transition: opacity 0.3s; /* Fade effect */
+    z-index: 1; 
+}
+
+/* Ensure the filters row is right under the search bar */
+#filtersRow {
+    display: none;
+    margin-top: 10px;  /* Space between the search box and filters */
+    align-items: center;  /* Center the filters under the search bar */
+    margin-left: 6%; /* Align filters with the start of the text input */
+    gap: 10px;  /* Space between filters */
+    position: relative;  
+}
+
+/* Style for the filter dropdown */
+#filtersRow select {
+    width: 100px;
+    padding: 4px 0px 8px 8px; /* Adjusted right padding */
+    font-size: 15px;
+    border-radius: 5px;
+    border: none; /* No border */
+    background-color: #f6f6ff; /* Match the container's background */
+    color: #444444d6;  /* Text color */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+
+/* Enlarge the dropdown on hover */
+#filtersRow select:hover {
+    color: black;
+}
+
 
 .title {
     margin-top: 20px;
@@ -95,8 +169,7 @@ button:hover {
 .carousel-control {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0 0 0 / 21%);
     color: white;
     border: none;
     padding: 10px;
@@ -107,10 +180,12 @@ button:hover {
 
 .carousel-control.prev {
     left: 0;
+    background-color: rgb(0 0 0 / 21%);
 }
 
 .carousel-control.next {
     right: 0;
+    background-color: rgb(0 0 0 / 21%);
 }
 
 .movie-title {
@@ -131,6 +206,7 @@ button:hover {
 .movie-genre, .movie-tags {
     font-style: italic;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .movie-summary {
@@ -229,7 +305,8 @@ button:hover {
     content: "●"; /* Cute circle separator */
     color: #6fa3ef; /* Circle color */
     margin-right: 10px; /* Space between dot and tag */
-    font-size: 10px; /* Adjust size of the circle */
+    margin-bottom: 3px;
+    font-size: 15px; /* Adjust size of the circle */
     display: inline-block; /* Ensure it behaves like inline */
     vertical-align: middle; /* Align vertically with the text */
 }
@@ -259,34 +336,38 @@ button:hover {
     margin-bottom: 30px;
 }
 
-/* Hover effect for the plus circle */
-.plus-circle:hover {
-    transform: scale(1.4); /* Enlarge on hover */
-}
-
-/* Tooltip styles */
-.tooltip {
-    visibility: hidden; /* Hide by default */
+.plus-tooltip{
     width: 70px; /* Width of the tooltip */
     background-color: #ffffff; /* Dark background */
     color: #6fa3ef; /* White text */
+    font-size: 8px;
     text-align: center; /* Center the text */
     border-radius: 5px; /* Rounded corners */
     padding: 2px; /* Padding */
     position: absolute; /* Absolute positioning */
-    z-index: 1; /* Show above other elements */
-    bottom: -125%; /* Position above the circle */
+    z-index: 1; 
+    bottom: -125%; /* Position under the circle */
     left: 50%; /* Center it horizontally */
     transform: translateX(-50%); /* Adjust for centering */
     opacity: 0; /* Make it transparent */
     transition: opacity 0.3s; /* Fade effect */
 }
 
+/* Hover effect for the plus circle */
+.plus-circle:hover {
+    transform: scale(1.4); /* Enlarge on hover */
+}
+
+/* Tooltip styles */
+.tooltip{
+    visibility: hidden; /* Hide by default */
+}
+
 /* Show the tooltip on hover */
+.filter-button:hover .tooltip,
 .plus-circle:hover .tooltip {
     visibility: visible; /* Show the tooltip */
     opacity: 1; /* Fully visible */
-    font-size: 8px
 }
 
 /* Tooltip icon style */
