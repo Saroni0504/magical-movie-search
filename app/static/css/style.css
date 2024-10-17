@@ -149,7 +149,6 @@ button:hover {
     max-width: 800px;
     overflow: hidden;
     margin: 20px auto;
-    transform: translateY(-10%);
 }
 
 .carousel {
