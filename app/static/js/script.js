@@ -1,9 +1,28 @@
 let currentSlide = 0;
 let selectedTag = null;  // Variable to keep track of the selected tag
 
+// Add event listener to the date filter dropdown to trigger filtering without re-searching or clicking
+document.getElementById('date-filter').addEventListener('change', async function () {
+    if (selectedTag) {
+        // If a tag is selected, trigger tag-based filtering with the current date filter
+        const tagText = selectedTag.textContent;
+        const dateFilter = document.getElementById('date-filter').value;
+
+        if (dateFilter === "all_years") {
+            await fetchMovies(`/search_by_tag?tag=${encodeURIComponent(tagText)}`);
+        } else {
+            await fetchMovies(`/search_by_tag?tag=${encodeURIComponent(tagText)}&date_filter=${encodeURIComponent(dateFilter)}`);
+        }
+    } else {
+        // Otherwise, trigger a text search with the new filter
+        searchMovie();
+    }
+});
+
 // Function to search for movies by free text
 async function searchMovie() {
     const searchText = document.getElementById('searchText').value;
+    const dateFilter = document.getElementById('date-filter').value;
 
     // Reset the selected tag to inactive state
     if (selectedTag) {
@@ -12,7 +31,13 @@ async function searchMovie() {
         selectedTag = null; // Clear the selected tag
     }
 
-    await fetchMovies(`/search_disney_movie?query=${encodeURIComponent(searchText)}`);
+    if (dateFilter === "all_years") {
+        // If "all_years" is selected, don't pass the date_filter parameter to the endpoint
+        await fetchMovies(`/search_disney_movie?query=${encodeURIComponent(searchText)}`);
+    } else {
+        // If a specific date is selected, include the date_filter parameter
+        await fetchMovies(`/search_disney_movie?query=${encodeURIComponent(searchText)}&date_filter=${encodeURIComponent(dateFilter)}`);
+    }
 }
 
 function toggleFilters() {
@@ -23,7 +48,6 @@ function toggleFilters() {
         filtersRow.style.display = "none";
     }
 }
-
 
 let allTags = [];  // Will store all the tags fetched from the backend
 let currentTagIndex = 0;  // Index to track the current set of tags being displayed
@@ -78,18 +102,35 @@ window.onload = fetchTags;
 
 // Function to handle tag selection and fetch movies
 async function selectTag(tagElement, tag) {
-    // If a tag is already selected, revert its color
+    // If the clicked tag is already selected (active), deselect it
+    if (selectedTag === tagElement) {
+        tagElement.classList.remove('active-tag'); // Remove active class
+        tagElement.style.color = '#988e8e'; // Reset color to default
+        selectedTag = null; // Clear selected tag
+        await fetchMovies(`/search_disney_movie`); // Optionally reload all movies
+        return;
+    }
+
+    // Deselect the previously selected tag, if any
     if (selectedTag) {
-        selectedTag.classList.remove('active-tag'); // Remove the active class from the previously selected tag
+        selectedTag.classList.remove('active-tag'); // Remove active class from the previously selected tag
         selectedTag.style.color = '#988e8e'; // Reset color to default
     }
 
-    // Set the new selected tag
+    // Select the new tag
     selectedTag = tagElement;
-    tagElement.classList.add('active-tag');  // Change color of selected tag
+    tagElement.classList.add('active-tag');  // Change color of the selected tag
+    tagElement.style.color = '#000'; // Change color to indicate active tag
 
-    // Fetch movies for the selected tag
-    await fetchMovies(`/search_by_tag?tag=${encodeURIComponent(tag)}`);
+    const dateFilter = document.getElementById('date-filter').value;
+
+    if (dateFilter === "all_years") {
+        // Fetch movies based on the selected tag without a date filter
+        await fetchMovies(`/search_by_tag?tag=${encodeURIComponent(tag)}`);
+    } else {
+        // Fetch movies based on the selected tag and date filter
+        await fetchMovies(`/search_by_tag?tag=${encodeURIComponent(tag)}&date_filter=${encodeURIComponent(dateFilter)}`);
+    }
 }
 
 // Fetch movie results from the backend API

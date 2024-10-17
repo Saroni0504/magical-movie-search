@@ -88,7 +88,7 @@ button:hover {
 
 .filter-tooltip{
     width: 40px; /* Width of the tooltip */
-    padding: 5px; /* Some padding */
+    padding: 1px; /* Some padding */
     background-color: #ffffff; /* Dark background */
     color: #6fa3ef; /* White text */
     font-size: 10px;
@@ -96,7 +96,7 @@ button:hover {
     text-align: center; /* Center the text */
     border-radius: 5px; /* Rounded corners */
     position: absolute; /* Absolute positioning */
-    bottom: -70%; 
+    bottom: -45%; 
     left: 50%; /* Center it horizontally */
     transform: translateX(-50%); /* Adjust for centering */
     transition: opacity 0.3s; /* Fade effect */
@@ -115,7 +115,7 @@ button:hover {
 
 /* Style for the filter dropdown */
 #filtersRow select {
-    width: 100px;
+    width: 120px;
     padding: 4px 0px 8px 8px; /* Adjusted right padding */
     font-size: 15px;
     border-radius: 5px;
@@ -149,6 +149,7 @@ button:hover {
     max-width: 800px;
     overflow: hidden;
     margin: 20px auto;
+    transform: translateY(-10%);
 }
 
 .carousel {
@@ -264,6 +265,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center the tags horizontally */
+    margin-top: 15px;
     margin-bottom: 20px;
 }
 

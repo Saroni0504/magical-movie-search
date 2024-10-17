@@ -1,6 +1,9 @@
+from datetime import datetime, timedelta
+
 from pandas import (
     DataFrame,
     read_csv,
+    Series,
 )
 
 from app.config import Config
@@ -23,7 +26,11 @@ def list_parser(stringified_list: str) -> list:
 def get_documents() -> DataFrame:
     global _documents
     if _documents is None:
-        _documents = read_csv(f"{DATASET_PATH}/{DATASET_NAME}.csv").fillna("")
+        _documents = read_csv(
+            f"{DATASET_PATH}/{DATASET_NAME}.csv",
+            parse_dates=["release_date"],
+        ).fillna("").sort_values(by="release_date", ascending=False)
+        _documents = _documents[_documents["description"] != ""]
         for column in ["tags", "genre"]:
             _documents[column] = _documents[column].apply(list_parser)
     return _documents
@@ -63,9 +70,8 @@ def fetch_query_results(query: str, k: int, score_filter: bool) -> list[tuple]:
     return results
 
 
-def processing_movie_record(movie_record: dict) -> dict:
-    release_date = movie_record["release_date"]
-    release_year = release_date.split(",")[1].strip() if "," in release_date else ""
+def processing_movie_record(movie_record: Series) -> dict:
+    release_year = movie_record["release_date"].year
     image_name = (movie_record["movie_id"] + "." + movie_record["image_format"])
     image_path = f"{IMAGES_PATH}/{image_name}"
     movie_record_info = {
@@ -89,3 +95,11 @@ def common_tags(n_occurences: int) -> list:
     rel_tags = tags_frequency[(tags_frequency >= n_occurences)].index
     rel_tags = rel_tags[rel_tags != ""].to_list()
     return rel_tags
+
+
+def calcultate_start_date(date_filter: str) -> datetime:
+    if date_filter == "past_year":
+        start_date = datetime.now() - timedelta(days=365)
+    elif date_filter == "past_decade":
+        start_date = datetime.now() - timedelta(days=365*10)
+    return start_date
