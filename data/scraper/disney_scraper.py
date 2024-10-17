@@ -48,6 +48,10 @@ def create_disney_dataset(records_limit=1_000):
         url=f"{BASE_URL}/wiki/List_of_Walt_Disney_Pictures_films"
     ).tail(records_limit)
 
+    data["release_date"] = data["release_date"].str.extract(
+        pat=r"([A-Z][a-z]+ \d{1,2}, \d{4})",
+        expand=False,
+    )
     # Extract movie image url and format
     data[["image_url", "image_format"]] = data["url"].apply(extract_movie_image_url_and_format)
 
