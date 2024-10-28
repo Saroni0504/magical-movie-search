@@ -2,7 +2,7 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Satisfy', cursive;
     background: linear-gradient(to right, #b3cde0, #dec1ff); /* Soft pastel blue to lavender gradient */
     color: #333;
     height: 100%; /* Ensure full height */
@@ -20,95 +20,57 @@ body, html {
 
 h1 {
     color: #444;
+    font-size: 35px;
 }
 
 .search-box {
     margin: 20px 0;
 }
 
-/* Align inputs and button for Top Movies in a row */
 .search-box-inline {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px; /* Add space between elements */
-    margin-bottom: 10px;
-}
-
-.search-box h2 {
-    margin-bottom: 10px;
+    position: relative; 
 }
 
 input[type="text"] {
-    padding: 10px;
+    padding: 10px 10px 10px 45px; 
     font-size: 16px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 60%;
+    border-radius: 20px; /* Rounded corners */
+    width: 80%; 
+    transition: border-color 0.3s;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #6fa3ef; /* Light blue button */
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    height: 40px; /* Match button height with input field */
-    margin-left: 2px;
-    
+.search-icon {
+    position: absolute; 
+    left: 60px; 
+    font-size: 24px; 
+    color: #9b9b9c; 
+    cursor: default; 
 }
 
-button:hover {
-    background-color: #4a90e2; /* Slightly darker blue on hover */
-    transform: scale(1.05);
+.tune-icon {
+    position: absolute; 
+    right: 60px;
+    font-size: 24px; 
+    color: #9b9b9c; 
+    cursor: pointer; 
 }
 
-/* Styles for the filter button */
-.filter-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #6fa3ef;
-    padding: 0;
-    margin-left: 1px;
-    border-radius: 5px;
-    height: 40px; /* Match filter button height with input field */
-    width: 30px; /* Keep the filter button square */
-}
-.filter-button img{
-    width: 17px;
-    height: 17px;
-}
-.filter-button:hover {
-    background-color: #4a90e2; /* Slightly darker blue on hover */
-    transform: scale(1.1);
+
+.tune-icon:hover {
+    color: #4a90e2; /* Change color on hover */
 }
 
-.filter-tooltip{
-    width: 40px; /* Width of the tooltip */
-    padding: 1px; /* Some padding */
-    background-color: #ffffff; /* Dark background */
-    color: #6fa3ef; /* White text */
-    font-size: 10px;
-    font-weight: bold;
-    text-align: center; /* Center the text */
-    border-radius: 5px; /* Rounded corners */
-    position: absolute; /* Absolute positioning */
-    bottom: -45%; 
-    left: 50%; /* Center it horizontally */
-    transform: translateX(-50%); /* Adjust for centering */
-    transition: opacity 0.3s; /* Fade effect */
-    z-index: 1; 
-}
 
 /* Ensure the filters row is right under the search bar */
 #filtersRow {
     display: none;
     margin-top: 10px;  /* Space between the search box and filters */
     align-items: center;  /* Center the filters under the search bar */
-    margin-left: 6%; /* Align filters with the start of the text input */
+    margin-left: 6%; 
     gap: 10px;  /* Space between filters */
     position: relative;  
 }
@@ -116,20 +78,24 @@ button:hover {
 /* Style for the filter dropdown */
 #filtersRow select {
     width: 120px;
-    padding: 4px 0px 8px 8px; /* Adjusted right padding */
+    padding: 4px 0px 8px 8px; 
     font-size: 15px;
     border-radius: 5px;
     border: none; /* No border */
     background-color: #f6f6ff; /* Match the container's background */
-    color: #444444d6;  /* Text color */
+    color: #444444d6;  
     cursor: pointer;
     transition: transform 0.2s ease-in-out; /* Smooth hover effect */
 }
 
-
-/* Enlarge the dropdown on hover */
-#filtersRow select:hover {
+/* Hover effect for dropdown when not open */
+#filtersRow select:not(.open):hover {
     color: black;
+}
+
+/* If you add an 'open' class when the dropdown is active */
+#filtersRow select.open {
+    color: #444444d6; /* Keep original color when open */
 }
 
 
@@ -164,6 +130,7 @@ button:hover {
     border: 1px solid #f8f8fb;
     border-radius: 5px;
     text-align: left;
+    font-family: Arial, sans-serif;
 }
 
 .carousel-control {
@@ -213,7 +180,7 @@ button:hover {
     margin-top: 10px;
 }
 
-/* New styles for movie presentation */
+
 .movie-container {
     display: flex; /* Use flexbox for horizontal layout */
     align-items: flex-start; /* Align items to the start */
@@ -229,7 +196,7 @@ button:hover {
     overflow: hidden; /* Hide overflow */
     display: flex; /* Use flexbox to center the image */
     justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    align-items: center; 
 }
 
 .movie-image-container img {
@@ -239,17 +206,17 @@ button:hover {
 }
 
 .movie-details {
-    flex: 2; /* Take up 2 parts of the available space */
-    padding: 10px; /* Padding inside the details */
-    text-align: left; /* Align text to the left */
+    flex: 2; 
+    padding: 10px; 
+    text-align: left; 
 }
 
-/* Add this CSS to control the logo size */
+/* Control the logo size */
 .logo {
-    max-width: 20%; /* Set a maximum width relative to the container */
+    max-width: 20%; 
     height: auto; /* Keep the aspect ratio */
     margin: 0 auto; /* Center the logo horizontally */
-    display: block; /* Ensure it's treated as a block element for centering */
+    display: block; 
 }
 
 /* Adjustments for mobile responsiveness */
@@ -272,7 +239,7 @@ button:hover {
 .tag-container {
     display: flex;
     justify-content: center; /* Center the tags */
-    flex-wrap: wrap; /* Allow tags to wrap to the next line if necessary */
+    flex-wrap: wrap; 
 }
 
 /* Individual tag styling */
@@ -285,7 +252,8 @@ button:hover {
     color: #988e8e; /* Text color */
     font-size: 13px;
     font-weight: bold;
-    position: relative; /* Position relative for separator placement */
+    font-family: Arial, sans-serif;
+    position: relative; 
 }
 
 
@@ -298,25 +266,25 @@ button:hover {
 }
 
 .tag-container span.tag.active-tag {
-    color: black;  /* Change to your desired active text color */
+    color: black;  /* Change to active text color */
 }
 
 /* Dot separator styling */
 .tag-container span.tag:not(:first-child)::before {
-    content: "●"; /* Cute circle separator */
+    content: "●"; /* Circle separator */
     color: #6fa3ef; /* Circle color */
     margin-right: 10px; /* Space between dot and tag */
     margin-bottom: 3px;
-    font-size: 15px; /* Adjust size of the circle */
-    display: inline-block; /* Ensure it behaves like inline */
-    vertical-align: middle; /* Align vertically with the text */
+    font-size: 15px; 
+    display: inline-block; 
+    vertical-align: middle; 
 }
 
 
 /* Tooltip container */
 .tooltip-container {
-    position: relative; /* Position for the tooltip */
-    display: inline-block; /* Inline block for proper placement */
+    position: relative; 
+    display: inline-block; 
 }
 
 /* Circle style for the plus sign */
@@ -324,31 +292,32 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center; /* Center the plus sign */
-    width: 20px; /* Width of the circle */
-    height: 20px; /* Height of the circle */
+    width: 20px; 
+    height: 20px; 
     border-radius: 50%; /* Make it circular */
     background-color: #6fa3ef; /* Blue color for the circle */
     color: white; /* White color for the plus sign */
-    font-weight: bold; /* Make the plus sign bold */
-    font-size: 14px; /* Size of the plus sign */
+    font-weight: bold; 
+    font-size: 14px; 
+    font-family: Arial, sans-serif;
     transition: transform 0.2s; /* Smooth transition for hover effect */
-    cursor: pointer; /* Change cursor to pointer */
+    cursor: pointer; 
     margin-top: 10px;
     margin-bottom: 30px;
 }
 
 .plus-tooltip{
-    width: 70px; /* Width of the tooltip */
-    background-color: #ffffff; /* Dark background */
-    color: #6fa3ef; /* White text */
+    width: 70px; 
+    background-color: #ffffff; 
+    color: #6fa3ef; 
     font-size: 8px;
-    text-align: center; /* Center the text */
+    text-align: center;
     border-radius: 5px; /* Rounded corners */
-    padding: 2px; /* Padding */
-    position: absolute; /* Absolute positioning */
+    padding: 2px; 
+    position: absolute; 
     z-index: 1; 
     bottom: -125%; /* Position under the circle */
-    left: 50%; /* Center it horizontally */
+    left: 50%; 
     transform: translateX(-50%); /* Adjust for centering */
     opacity: 0; /* Make it transparent */
     transition: opacity 0.3s; /* Fade effect */
@@ -365,7 +334,6 @@ button:hover {
 }
 
 /* Show the tooltip on hover */
-.filter-button:hover .tooltip,
 .plus-circle:hover .tooltip {
     visibility: visible; /* Show the tooltip */
     opacity: 1; /* Fully visible */
@@ -373,10 +341,10 @@ button:hover {
 
 /* Tooltip icon style */
 .tooltip-icon {
-    width: 16px; /* Adjust icon size */
-    height: 16px; /* Adjust icon size */
+    width: 16px; 
+    height: 16px; 
     margin-left: 5px; /* Space between text and icon */
-    vertical-align: middle; /* Align vertically */
+    vertical-align: middle; 
 }
 
 

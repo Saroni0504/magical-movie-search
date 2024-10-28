@@ -3,34 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disney Movie Recommender</title>
+    <title>Magical Movie Search</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="icon" type="image/png" href="/static/images/disney_logo.png">
+    <!-- Updated Material Icons link -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Satisfy&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-
-        <!-- Add image at the top -->
         <img src="/static/images/disney_logo.png" alt="Disney Logo" class="logo">
-
-        <h1>Disney Movie Recommender</h1>
+        <h1>Magical Movie Search</h1>
 
         <div class="search-box">
             <div class="search-box-inline">
-                <input type="text" id="searchText" placeholder="Enter text to find a movie">
-                
-                <!-- Filters button on the right side of the search button -->
-                <div class="tooltip-container">
-                    <div class="filter-button" onclick="toggleFilters()">
-                        <img src="/static/images/filter-icon.png" alt="Icon" class="image-button">
-                        <span class="tooltip filter-tooltip">Filters</span>
-                    </div>
-                </div>
-        
-                <button onclick="searchMovie()">Search Movies</button>
+                <!-- Search icon -->
+                <span class="material-icons search-icon" onclick="searchMovie()">search</span>
+                <!-- Text input for search -->
+                <input type="text" id="searchText" placeholder="Enter text to find a movie" onkeyup="checkEnter(event)">
+                <!-- Tune icon -->
+                <span class="material-icons tune-icon" onclick="toggleFilters()">tune</span>
             </div>
-            
-            <!-- Filters row (initially hidden) -->
+        
             <div class="filters-row" id="filtersRow">
                 <select id="date-filter" name="date-filter">
                     <option value="all_years">All years</option>
@@ -40,7 +34,6 @@
             </div>
         </div>
 
-        <!-- Tags and Show More container -->
         <div class="tag-wrapper">
             <div class="tag-container">
                 <!-- Tags will be dynamically generated here -->
@@ -52,7 +45,6 @@
             </div>
         </div>
 
-        <!-- Carousel for displaying movie results -->
         <div class="carousel-wrapper">
             <button class="carousel-control prev" onclick="prevSlide()">❮</button>
             <div class="carousel" id="carousel"></div>
