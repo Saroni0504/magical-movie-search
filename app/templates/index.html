@@ -9,6 +9,7 @@
     <!-- Updated Material Icons link -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
 </head>
 <body>
     <div class="container">
@@ -18,7 +19,7 @@
         <div class="search-box">
             <div class="search-box-inline">
                 <!-- Search icon -->
-                <span class="material-icons search-icon" onclick="searchMovie()">search</span>
+                <span class="material-icons search-icon">search</span>
                 <!-- Text input for search -->
                 <input type="text" id="searchText" placeholder="Enter text to find a movie" onkeyup="checkEnter(event)">
                 <!-- Tune icon -->
@@ -26,13 +27,34 @@
             </div>
         
             <div class="filters-row" id="filtersRow">
-                <select id="date-filter" name="date-filter">
-                    <option value="all_years">All years</option>
-                    <option value="past_year">Past year</option>
-                    <option value="past_decade">Past decade</option>
-                </select>
+                <div class="filter-container" id="date-filter-container">
+                    <select id="date-filter" name="date-filter">
+                        <option value="all_years">All years</option>
+                        <option value="past_year">Past year</option>
+                        <option value="past_decade">Past decade</option>
+                    </select>
+                </div>
+                
+                <div class="filter-container" id="sorting-container">
+                    <select id="sorting" name="sorting">
+                        <option value="" disabled selected>Sort by</option> <!-- Informative title -->
+                        <option value="release_date">Date</option>
+                        <option value="budget">Budget</option>
+                        <option value="box_office">Box Office</option>
+                        <option value="profit">Profit</option>
+                    </select>
+                </div>
+            
+                <div class="filter-container" id="n-results-container">
+                    <select id="n-results" name="n-results" onchange="limitResults()">
+                        <option value="" disabled selected>N results</option>
+                        <option value="all">All</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
         <div class="tag-wrapper">
             <div class="tag-container">
@@ -45,13 +67,16 @@
             </div>
         </div>
 
-        <div class="carousel-wrapper">
-            <button class="carousel-control prev" onclick="prevSlide()">❮</button>
-            <div class="carousel" id="carousel"></div>
-            <button class="carousel-control next" onclick="nextSlide()">❯</button>
+        <div class="swiper-container">
+            <div class="swiper-wrapper" id="carousel">
+                <!-- Dynamic slides will be inserted here by JavaScript -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>

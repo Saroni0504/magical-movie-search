@@ -1,9 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
 body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Satisfy', cursive;
-    background: linear-gradient(to right, #b3cde0, #dec1ff); /* Soft pastel blue to lavender gradient */
+    background: linear-gradient(to right, #64a9dc, #ae80e1); /* Soft pastel blue to lavender gradient */
     color: #333;
     height: 100%; /* Ensure full height */
 }
@@ -12,19 +23,20 @@ body, html {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f6f6ff;
+    background-color: transparent;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 h1 {
-    color: #444;
+    color: #f4d9f6;
     font-size: 35px;
+    font-family: 'Satisfy', cursive;
 }
 
 .search-box {
     margin: 20px 0;
+    background-color: transparent;
 }
 
 .search-box-inline {
@@ -37,15 +49,17 @@ h1 {
 input[type="text"] {
     padding: 10px 10px 10px 45px; 
     font-size: 16px;
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
     border-radius: 20px; /* Rounded corners */
     width: 80%; 
     transition: border-color 0.3s;
+
+    
 }
 
 .search-icon {
     position: absolute; 
-    left: 60px; 
+    left: 85px; 
     font-size: 24px; 
     color: #9b9b9c; 
     cursor: default; 
@@ -53,7 +67,7 @@ input[type="text"] {
 
 .tune-icon {
     position: absolute; 
-    right: 60px;
+    right: 85px;
     font-size: 24px; 
     color: #9b9b9c; 
     cursor: pointer; 
@@ -65,39 +79,49 @@ input[type="text"] {
 }
 
 
-/* Ensure the filters row is right under the search bar */
+/* Filters row styling */
 #filtersRow {
-    display: none;
-    margin-top: 10px;  /* Space between the search box and filters */
-    align-items: center;  /* Center the filters under the search bar */
+    display: none; /* Use flexbox for alignment */
+    margin-top: 10px;  
+    align-items: center;  
     margin-left: 6%; 
-    gap: 10px;  /* Space between filters */
-    position: relative;  
+}
+
+/* Base styles for each filter container */
+.filter-container {
+    margin: 0 5px; /* Add space between filters */
+}
+
+/* Specific styles for each filter if needed */
+#date-filter-container select {
+    
+}
+
+#sorting-container select {
+    
+}
+
+#n-results-container select {
+    
 }
 
 /* Style for the filter dropdown */
 #filtersRow select {
-    width: 120px;
-    padding: 4px 0px 8px 8px; 
+    width: 100%; /* Full width within the container */
+    padding: 4px 8px; 
+    background-color: transparent;
     font-size: 15px;
     border-radius: 5px;
-    border: none; /* No border */
-    background-color: #f6f6ff; /* Match the container's background */
+    border: none; 
     color: #444444d6;  
     cursor: pointer;
     transition: transform 0.2s ease-in-out; /* Smooth hover effect */
 }
 
-/* Hover effect for dropdown when not open */
+/* Hover effect for dropdown */
 #filtersRow select:not(.open):hover {
     color: black;
 }
-
-/* If you add an 'open' class when the dropdown is active */
-#filtersRow select.open {
-    color: #444444d6; /* Keep original color when open */
-}
-
 
 .title {
     margin-top: 20px;
@@ -106,32 +130,127 @@ input[type="text"] {
     border: 1px solid #ddd;
     border-radius: 5px;
     text-align: left;
+    font-family: 'Satisfy', cursive;
 }
 
-/* Carousel styles */
-.carousel-wrapper {
-    position: relative;
+/* Center align Swiper slides */
+.swiper-wrapper {
+    justify-content: center;
+    width:80%;
+}
+.swiper-container {
     width: 100%;
-    max-width: 800px;
+    height: 500px;
     overflow: hidden;
-    margin: 20px auto;
+    padding: 0; /* Remove padding */
+    margin: 0 auto; /* Center the container within the viewport */
 }
 
-.carousel {
+.swiper-slide {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    justify-content: center;
+    align-items: center;
+    width: 33.33%;
 }
 
-.carousel-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 20px;
-    background-color: #fbf7ff;
-    border: 1px solid #f8f8fb;
-    border-radius: 5px;
-    text-align: left;
-    font-family: Arial, sans-serif;
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 200px;
+    height: 70%;
+    margin: 0;
+    padding: 30px;
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 25px;
+    transition: all 0.5s ease;
+    overflow: hidden;
 }
+
+.card:hover {
+    transform: translateY(10px);
+}
+
+.card:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(59, 72, 164, 0.6) 1%,
+      rgba(94, 186, 180, 0.9) 98%
+    );
+    transition: all 0.5s;
+    opacity: 0;
+    border-radius: 20px;
+  }
+
+  .card:hover:after {
+    opacity: 1;
+  }
+
+.card img {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.card .info {
+    position: relative;
+    z-index: 3;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.5s;
+    user-select: none;
+    height: 100%; /* Take the full height of the card */
+    overflow-y: auto; /* Allow vertical scrolling */
+    padding: 20px;
+    text-align: left; /* Align text to the left */
+    font-size: 14px; /* Set a smaller font size */
+    line-height: 1.4; /* Adjust line height for readability */
+
+  }
+  ::-webkit-scrollbar {
+    appearance: none;
+    background: transparent; 
+  }
+
+.card .info h1{
+    color: white;
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-family: "Nunito", sans-serif;
+}
+
+.card .info p{
+   font-size: 13px;
+   line-height: 1.4;
+    font-weight:bold;
+}
+
+.card:hover .info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.swiper-pagination-bullet {
+    background-color: #4a90e2;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: #4a90e2;
+}
+
 
 .carousel-control {
     position: absolute;
@@ -155,61 +274,6 @@ input[type="text"] {
     background-color: rgb(0 0 0 / 21%);
 }
 
-.movie-title {
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.movie-image {
-    width: 100%; /* Adjust width to fill the container */
-    height: auto; /* Keep aspect ratio */
-}
-
-.movie-release {
-    margin-bottom: 20px; /* Adjust the value to control the space */
-}
-
-.movie-genre, .movie-tags {
-    font-style: italic;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-
-.movie-summary {
-    margin-top: 10px;
-}
-
-
-.movie-container {
-    display: flex; /* Use flexbox for horizontal layout */
-    align-items: flex-start; /* Align items to the start */
-    padding: 20px; /* Padding around the movie container */
-    border-bottom: 1px solid #fffcfc; /* Divider between movies */
-}
-
-.movie-image-container {
-    flex: 1; /* Take up 1 part of the available space */
-    padding: 0; /* Remove padding inside the image container */
-    border: 2px solid black; /* Change frame color to black */
-    border-radius: 10px; /* Rounded corners */
-    overflow: hidden; /* Hide overflow */
-    display: flex; /* Use flexbox to center the image */
-    justify-content: center; /* Center horizontally */
-    align-items: center; 
-}
-
-.movie-image-container img {
-    width: 100%; /* Set image width to 100% of the container */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove bottom space (if any) */
-}
-
-.movie-details {
-    flex: 2; 
-    padding: 10px; 
-    text-align: left; 
-}
 
 /* Control the logo size */
 .logo {
@@ -249,7 +313,7 @@ input[type="text"] {
     border: none; /* No border */
     cursor: pointer;
     display: inline-block;
-    color: #988e8e; /* Text color */
+    color: #736e6e; /* Text color */
     font-size: 13px;
     font-weight: bold;
     font-family: Arial, sans-serif;
@@ -272,7 +336,7 @@ input[type="text"] {
 /* Dot separator styling */
 .tag-container span.tag:not(:first-child)::before {
     content: "●"; /* Circle separator */
-    color: #6fa3ef; /* Circle color */
+    color: #6f81ef; /* Circle color */
     margin-right: 10px; /* Space between dot and tag */
     margin-bottom: 3px;
     font-size: 15px; 
