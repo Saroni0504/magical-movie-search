@@ -36,23 +36,31 @@
                 </div>
                 
                 <div class="filter-container" id="sorting-container">
-                    <select id="sorting" name="sorting">
-                        <option value="" disabled selected>Sort by</option> <!-- Informative title -->
-                        <option value="release_date">Date</option>
-                        <option value="budget">Budget</option>
-                        <option value="box_office">Box Office</option>
-                        <option value="profit">Profit</option>
-                    </select>
+                    <button class="sort-button" onclick="toggleSortMenu()">Sort by</button>
+                    <div class="sort-menu" id="sortMenu">
+                        <div class="sort-options">
+                            <div onclick="sortBy('release_date')">Date</div>
+                            <div onclick="sortBy('budget')">Budget</div>
+                            <div onclick="sortBy('box_office')">Box Office</div>
+                            <div onclick="sortBy('profit')">Profit</div>
+                        </div>
+                        <hr>
+                        <div class="sort-order">
+                            <div onclick="setSortOrder('ascending')">Ascending</div>
+                            <div onclick="setSortOrder('descending')">Descending</div>
+                        </div>
+                    </div>
                 </div>
             
                 <div class="filter-container" id="n-results-container">
+                    <label for="n-results">Results:</label>
                     <select id="n-results" name="n-results" onchange="limitResults()">
-                        <option value="" disabled selected>N results</option>
                         <option value="all">All</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="50">50</option>
                     </select>
+                </div>
                 </div>
             </div>
 

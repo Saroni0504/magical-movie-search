@@ -5,7 +5,6 @@ const carousel = document.getElementById('carousel');
 const tagContainer = document.querySelector('.tag-container');
 const showMoreButton = document.querySelector('.plus-circle');
 const filtersRow = document.getElementById('filtersRow');
-const sortingDropdown = document.getElementById('sorting'); // Sorting dropdown
 const nResultsDropdown = document.getElementById('n-results'); // N results dropdown
 
 let currentSlide = 0;
@@ -13,20 +12,88 @@ let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
 let currentTagIndex = 0; // Track the current set of displayed tags
 const TAGS_PER_BATCH = 6; // Number of tags per batch for display
-let currentSortingOption = sortingDropdown.value;
+let currentSortingOption = 'release_date'; // Default sorting field
+let currentSortOrder = 'descending'; // Default sorting order
 let nResultsLimit = null; // Default limit for results
+
+
 
 
 // Toggle date filter dropdown
 dateFilter.addEventListener('focus', () => dateFilter.classList.add('open'));
 dateFilter.addEventListener('blur', () => dateFilter.classList.remove('open'));
 
+nResultsDropdown.addEventListener('focus', () => nResultsDropdown.classList.add('open'));
+nResultsDropdown.addEventListener('blur', () => nResultsDropdown.classList.remove('open'));
+
 // Date filter change event
 dateFilter.addEventListener('change', handleDateFilterChange);
 
-// Sorting change event
-sortingDropdown.addEventListener('change', handleSortChange); // Sorting change event
+// Toggle the visibility of the sort menu
+function toggleSortMenu() {
+    const menu = document.getElementById('sortMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
 
+// Close the sort menu if clicking outside of it
+window.addEventListener('click', function(event) {
+    const menu = document.getElementById('sortMenu');
+    const button = document.querySelector('.sort-button');
+    if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+// Sort by field (e.g., date, budget, box office, profit)
+function sortBy(field) {
+    currentSortingOption = field;
+    updateActiveSortOption(); // Mark selected option as active
+    toggleSortMenu(); // Close menu after selection
+
+    // Check if a tag is selected, then fetch movies by tag with the updated sort option
+    if (selectedTag) {
+        fetchMoviesByTag(selectedTag.textContent);
+    } else {
+        searchMovie(); // Otherwise, update results based on current search query
+    }
+}
+
+// Set sort order (ascending or descending)
+function setSortOrder(order) {
+    currentSortOrder = order;
+    updateActiveSortOrder(); // Mark selected order as active
+    toggleSortMenu(); // Close menu after selection
+
+    // Check if a tag is selected, then fetch movies by tag with the updated sort order
+    if (selectedTag) {
+        fetchMoviesByTag(selectedTag.textContent);
+    } else {
+        searchMovie(); // Otherwise, update results based on current search query
+    }
+}
+
+
+// Helper function to mark the active sort option
+function updateActiveSortOption() {
+    document.querySelectorAll('.sort-options div').forEach(option => {
+        option.classList.remove('active');
+    });
+    document.querySelector(`.sort-options div[onclick="sortBy('${currentSortingOption}')"]`).classList.add('active');
+}
+
+// Helper function to mark the active sort order
+function updateActiveSortOrder() {
+    document.querySelectorAll('.sort-order div').forEach(option => {
+        option.classList.remove('active');
+    });
+    document.querySelector(`.sort-order div[onclick="setSortOrder('${currentSortOrder}')"]`).classList.add('active');
+}
+
+// Initial setup to mark the default options as active
+window.onload = function() {
+    updateActiveSortOption();
+    updateActiveSortOrder();
+};
 // Initialize limit results from dropdown
 nResultsDropdown.addEventListener('change', limitResults);
 
@@ -59,7 +126,8 @@ async function searchMovie() {
     const query = searchText.value.trim();
     if (query === "") return;
     clearSelectedTag();
-    await fetchMovies(`/search_disney_movie?query=${encodeURIComponent(query)}`);
+    await fetchMovies({ query });
+    swiper.slideTo(0, 0);
 }
 
 // Toggle filters row visibility
@@ -107,25 +175,28 @@ function showMoreTags() {
 
 // Select or deselect a tag and fetch movies
 async function selectTag(tagElement, tag) {
-    if (selectedTag === tagElement) {
-        clearSelectedTag();
-        await fetchMovies(`/search_disney_movie`);
-        return;
+    // Deselect the previously selected tag, if any
+    if (selectedTag) {
+        selectedTag.classList.add('previously-selected');
+        selectedTag.classList.remove('active-tag');
     }
 
-    clearSelectedTag();
+    // Set the new selected tag
     selectedTag = tagElement;
-    tagElement.classList.add('active-tag');
-    tagElement.style.color = '#000';
+    selectedTag.classList.add('active-tag');
+    selectedTag.classList.remove('previously-selected');
 
+    // Fetch movies by tag and reset the carousel to the first slide
     await fetchMoviesByTag(tag);
+    swiper.slideTo(0, 0); // Reset carousel to the first slide without animation
 }
+
 
 // Clear selected tag styling
 function clearSelectedTag() {
     if (selectedTag) {
         selectedTag.classList.remove('active-tag');
-        selectedTag.style.color = '#736e6e';
+        selectedTag.style.color = '#fffff';
         selectedTag = null;
     }
 }
@@ -133,8 +204,7 @@ function clearSelectedTag() {
 
 // Fetch movies by tag and apply the selected sort option
 async function fetchMoviesByTag(tag) {
-    const endpoint = `/search_by_tag?tag=${encodeURIComponent(tag)}&sort_by=${currentSortingOption}`;
-    await fetchMovies(endpoint);
+    await fetchMovies({ tag });
 }
 
 function limitResults() {
@@ -144,20 +214,17 @@ function limitResults() {
 }
 
 const swiper = new Swiper('.swiper-container', {
-    slidesPerView: 3, // Display 3 slides at once
-    spaceBetween: 10, // Add space between slides as needed
-    centeredSlides: false, // Disable centering to prevent partial slides on the sides
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-    },
+    slidesPerView: 5,          // Show 3 slides at a time
+    spaceBetween: 5,          // Space between slides
+    centeredSlides: false,     // Disable centering to prevent starting in the middle
+    loop: false,               // Disable looping for sequential slide presentation
     navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
     },
     breakpoints: {
         768: {
-            slidesPerView: 3,
+            slidesPerView: 5,
         },
         480: {
             slidesPerView: 1,
@@ -165,44 +232,60 @@ const swiper = new Swiper('.swiper-container', {
     },
 });
 
-// Fetch movie data and update carousel
-async function fetchMovies(endpoint) {
+
+
+
+async function fetchMovies({ query = '', tag = '', sort_by = currentSortingOption, order = currentSortOrder } = {}) {
     try {
+        // Build the endpoint with optional query and tag parameters
+        let endpoint = `/search_disney_movie?sort_by=${encodeURIComponent(sort_by)}&order=${encodeURIComponent(order)}`;
+        
+        if (query) {
+            endpoint += `&query=${encodeURIComponent(query)}`;
+        }
+        if (tag) {
+            endpoint = `/search_by_tag?tag=${encodeURIComponent(tag)}`;
+        }
+
         const response = await fetch(endpoint);
         const data = await response.json();
-        const filteredMovies = filterMoviesByDate(data);
 
-        // Sort movies based on the selected sorting option
+        // Apply client-side sorting based on the selected sorting option
+        const filteredMovies = filterMoviesByDate(data);
         sortMovies(filteredMovies);
 
         // Apply the results limit
         const limitedMovies = nResultsLimit ? filteredMovies.slice(0, nResultsLimit) : filteredMovies;
-        carousel.innerHTML = '';
-        limitedMovies.forEach(movie => {
-            const slide = document.createElement('div');
-            slide.classList.add('swiper-slide');
-
-            slide.innerHTML = `
-                <div class="card">
-                    <img src="${movie.image_path}" alt="${movie.title}" />
-                    <div class="info">
-                        <h1>${movie.title}</h1>
-                        <p>
-                            <strong>Running time:</strong> ${movie.running_time} minutes<br>
-                            <strong>Release year:</strong> ${movie.release_year}<br>
-                            <strong>Genre:</strong> ${movie.genre.join(', ')}<br>
-                            <strong>Tags:</strong> ${movie.tags.join(', ')}<br><br>
-                            ${movie.summary}
-                        </p>
-                    </div>
-                </div>`;
-            carousel.appendChild(slide); // Add the new slide to the carousel
-        });
-
-        swiper.update(); // Update Swiper to recognize new slides
+        displayMovies(limitedMovies); // Display the sorted and limited movies
     } catch (error) {
         console.error('Error fetching movies:', error);
     }
+}
+
+// Function to display movies in the carousel
+function displayMovies(movies) {
+    carousel.innerHTML = ''; // Clear previous movies
+    movies.forEach(movie => {
+        const slide = document.createElement('div');
+        slide.classList.add('swiper-slide');
+
+        slide.innerHTML = `
+            <div class="card">
+                <img src="${movie.image_path}" alt="${movie.title}" />
+                <div class="info">
+                    <h1>${movie.title}</h1>
+                    <h2>${movie.release_year} ● ${movie.running_time} minutes<br>${movie.genre.join(' ● ')}</h2>
+                    <h2><span class="smaller-text"><i>${movie.tags.join(' ○ ')}</i></span><br></h2>
+                    <p>
+                        ${movie.summary}
+                    </p>
+                </div>
+            </div>`;
+        carousel.appendChild(slide);
+    });
+
+    swiper.slideTo(0, 0); // Reset carousel to the first slide
+    swiper.update(); // Update Swiper to recognize new slides
 }
 
 // Handle sorting change
@@ -239,24 +322,23 @@ function filterMoviesByDate(movies) {
     });
 }
 
-// Sort movies based on the selected sorting criteria
 function sortMovies(movies) {
-    const sortBy = sortingDropdown.value;
+    const sortBy = currentSortingOption;
 
-    switch (sortBy) {
-        case 'release_date':
-            movies.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-            break;
-        case 'budget':
-            movies.sort((a, b) => b.budget - a.budget);
-            break;
-        case 'box_office':
-            movies.sort((a, b) => b.box_office - a.box_office);
-            break;
-        case 'profit':
-            movies.sort((a, b) => b.profit - a.profit);
-            break;
-    }
+    movies.sort((a, b) => {
+        let comparison = 0;
+        if (sortBy === 'release_date') {
+            comparison = new Date(b.release_date) - new Date(a.release_date);
+        } else if (sortBy === 'budget') {
+            comparison = b.budget - a.budget;
+        } else if (sortBy === 'box_office') {
+            comparison = b.box_office - a.box_office;
+        } else if (sortBy === 'profit') {
+            comparison = b.profit - a.profit;
+        }
+
+        return currentSortOrder === 'ascending' ? comparison * -1 : comparison;
+    });
 }
 
 // Limit results based on dropdown
