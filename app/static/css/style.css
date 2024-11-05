@@ -11,7 +11,7 @@
 
 body, html {
   font-family: 'Satisfy', cursive;
-  background: linear-gradient(to right, #0c70ba, #9657db);
+  background: linear-gradient(to right, #064675, #110076);
   color: #333;
   height: 100%;
 }
@@ -49,7 +49,7 @@ input[type="text"] {
   border-radius: 20px;
   width: 80%;
   transition: border-color 0.3s;
-  color:#0e0e0e;
+  color: #0e0e0e;
 }
 
 .search-icon {
@@ -75,23 +75,53 @@ input[type="text"] {
   display: none;
   margin-top: 10px;
   align-items: center;
-  margin-left: 6%;
+  justify-content: center;
 }
 
 .filter-container {
   margin: 0 5px;
+  position: relative;
 }
 
-#filtersRow select {
-  width: 100%;
-  padding: 4px 8px;
-  background-color: transparent;
-  font-size: 15px;
-  border-radius: 5px;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+.filter-button {
+    background: transparent;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: 'Nunito', sans-serif;
+    padding: 4px 8px;
+}
+
+.filter-menu {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 150px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: black;
+}
+
+.filter-menu div {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+#dateMenu div {
+    white-space: nowrap; /* Prevents wrapping in the date filter menu */
+    width: 100%;
+    padding: 8px 16px;
+}
+
+/* Divider between sort options and order */
+.sort-menu hr {
+    margin: 4px 0;
+    border: none;
+    border-top: 1px solid #ddd;
 }
 
 .sort-button {
@@ -108,14 +138,16 @@ input[type="text"] {
 .sort-menu {
     display: none;
     position: absolute;
-    background-color: #000000;
+    top: 100%; /* Position below the button */
+    left: 0;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     width: 150px;
     font-family: 'Nunito', sans-serif;
     font-size: 14px;
-    color: white;
+    color: black;
 }
 
 .sort-options div,
@@ -137,75 +169,129 @@ input[type="text"] {
 }
 
 /* Highlight the active option in the sort menu */
+.filter-menu div.active,
 .sort-options div.active,
 .sort-order div.active {
     font-weight: bold;
-    color: white;
+    color: black;
 }
 
-#n-results option:hover,
-#date-filter option:hover {
-  color: black; 
-}
-.sort-button:hover{
-  font-weight: bold; 
+.filter-menu div.active::before,
+.sort-options div.active::before,
+.sort-order div.active::before {
+    content: '●';
+    color: black;
+    margin-right: 5px; /* Adjust as needed */
 }
 
-#n-results:not(.open):hover,
-#date-filter:not(.open):hover{
+.triangle {
+    font-size: 0.6em; /* Adjust size as needed */
+    display: inline-block;
+    transform: scale(1.3, 0.7); /* Adjust to align vertically with text */
+  }
+
+/* Tag styles */
+.tag-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.tag-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tag-container span.tag {
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.tag-container span.tag:active,
+.tag-container span.tag.active-tag {
   font-weight: bold;
 }
 
-#n-results-container {
-    display: flex;
-    align-items: center;
+/* Styling for inactive tags */
+.tag-container span.tag.previously-selected {
+    color: #ffffff; /* Inactive color */
 }
 
-#n-results-container label {
-    margin-right: 5px;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
+.tag-container span.tag:not(:first-child)::before {
+  content: "●";
+  color: #ffffff;
+  margin-right: 10px;
+  font-size: 15px;
+  vertical-align: middle;
 }
 
-/* Style the select dropdown with black background and white text */
-#date-filter, #n-results {
-    background-color: black; /* Set background color to black */
-    color: white; /* Set text color to white */
-    border: none; /* Remove border */
-    border-radius: 5px;
-    padding: 4px 8px;
-    font-size: 15px;
-    cursor: pointer;
+/* Tooltip styles */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
 }
 
-/* Style options to be white text on black background */
-#date-filter option, #n-results option {
-    background-color: black; /* Background color for options */
-    color: white; /* Text color for options */
-    font-weight: normal; /* Normal font weight by default */
+.plus-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  transition: transform 0.2s;
 }
 
-/* Bold text on hover */
-#date-filter option:hover, #n-results option:hover {
-    font-weight: bold; /* Bold text on hover */
+.plus-circle:hover {
+  transform: scale(1.4);
 }
 
-/* Bold text for the selected option */
-#date-filter option:checked, #n-results option:checked {
-    font-weight: bold; /* Bold text for selected option */
-}
-
-.title {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+.plus-tooltip {
+  visibility: hidden;
+  width: 70px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 8px;
+  text-align: center;
   border-radius: 5px;
-  text-align: left;
-  font-family: 'Satisfy', cursive;
+  padding: 2px;
+  position: absolute;
+  z-index: 1;
+  bottom: -125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
+.plus-circle:hover .plus-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+/* Swiper styles */
 .swiper-container {
   width: 170%;
   height: 500px;
@@ -318,31 +404,35 @@ input[type="text"] {
   color: #4a90e2;
 }
 
-.carousel-control {
-  position: absolute;
-  top: 50%;
-  background-color: rgb(0 0 0 / 21%);
-  color: white;
-  border: none;
-  padding: 10px;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.carousel-control.prev {
-  left: 0;
-}
-
-.carousel-control.next {
-  right: 0;
+.logo-container {
+    position: relative;
+    display: inline-block;
 }
 
 .logo {
-  max-width: 20%;
-  height: auto;
-  margin: 0 auto;
-  display: block;
+    max-width: 20%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.fireworks {
+    position: absolute;
+    max-width: 20%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/images/fireworks.gif'); /* Path to the fireworks GIF */
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.logo-container:hover .fireworks {
+    opacity: 1; /* Show fireworks on hover */
 }
 
 @media (max-width: 600px) {
@@ -354,125 +444,7 @@ input[type="text"] {
   }
 }
 
-.tag-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 15px;
-  margin-bottom: 20px;
-}
-
-.tag-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.tag-container span.tag {
-  padding: 5px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #ffffff;
-  font-size: 13px;
-  font-family: Arial, sans-serif;
-  position: relative;
-}
-
-.tag-container span.tag:active,
-.tag-container span.tag:hover,
-.tag-container span.tag.active-tag {
-  font-weight: bold;
-}
-
-
-/* Styling for inactive tags */
-.tag-container span.tag.previously-selected {
-    color: #ffffff; /* Inactive color */
-}
-
-/* Hover effect for previously selected tags */
-.tag-container span.tag.previously-selected:hover {
-    font-weight: bold !important; /* Hover color */
-}
-
-
-.tag-container span.tag:not(:first-child)::before {
-  content: "●";
-  color: #ffffff;
-  margin-right: 10px;
-  font-size: 15px;
-  vertical-align: middle;
-}
-
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.plus-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  color: black;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  transition: transform 0.2s;
-}
-
-.plus-circle:hover {
-  transform: scale(1.4);
-}
-
-.plus-tooltip {
-  width: 70px;
-  background-color: #000000;
-  color: #ffffff;
-  font-size: 8px;
-  text-align: center;
-  border-radius: 5px;
-  padding: 2px;
-  position: absolute;
-  z-index: 1;
-  bottom: -125%;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-* Hover effect for the plus circle */
-.plus-circle:hover {
-    transform: scale(1.4); /* Enlarge on hover */
-}
-
-/* Tooltip styles */
-.tooltip{
-    visibility: hidden; /* Hide by default */
-}
-
-/* Show the tooltip on hover */
-.plus-circle:hover .tooltip {
-    visibility: visible; /* Show the tooltip */
-    opacity: 1; /* Fully visible */
-}
-
-/* Tooltip icon style */
-.tooltip-icon {
-    width: 16px; 
-    height: 16px; 
-    margin-left: 5px; /* Space between text and icon */
-    vertical-align: middle; 
-}
-
+/* Hide default scrollbar */
 ::-webkit-scrollbar {
-  appearance: none;
-  background: transparent;
+  display: none;
 }
