@@ -1,9 +1,10 @@
-from datetime import datetime, timedelta
 
 from pandas import (
     DataFrame,
+    # merge,
     read_csv,
     Series,
+    # to_datetime,
 )
 
 from app.config import Config
@@ -62,11 +63,9 @@ def fetch_query_results(query: str, k: int, score_filter: bool) -> list[tuple]:
     if score_filter:
         max_score = None if len(results) == 0 else results[0][1]
         results = [
-            url for url, score in results
+            (url, score) for url, score in results
             if score >= (max_score * Config.score_threshold)
         ]
-    else:
-        results = [url for url, _ in results]
     return results
 
 
@@ -76,11 +75,17 @@ def processing_movie_record(movie_record: Series) -> dict:
     image_path = f"{IMAGES_PATH}/{image_name}"
     movie_record_info = {
         "title": movie_record["title"],
+        "release_date": movie_record["release_date"],
         "release_year": release_year,
+        "running_time": movie_record["running_time_minutes"],
         "genre": movie_record["genre"],
         "tags": movie_record["tags"],
         "summary": movie_record["movie_summary"],
+        "budget": movie_record["budget"],
+        "box_office": movie_record["box_office"],
+        "profit": movie_record["profit"],
         "image_path": image_path,
+        "relevancy": movie_record["relevancy"]
     }
     return movie_record_info
 
@@ -95,11 +100,3 @@ def common_tags(n_occurences: int) -> list:
     rel_tags = tags_frequency[(tags_frequency >= n_occurences)].index
     rel_tags = rel_tags[rel_tags != ""].to_list()
     return rel_tags
-
-
-def calcultate_start_date(date_filter: str) -> datetime:
-    if date_filter == "past_year":
-        start_date = datetime.now() - timedelta(days=365)
-    elif date_filter == "past_decade":
-        start_date = datetime.now() - timedelta(days=365*10)
-    return start_date
