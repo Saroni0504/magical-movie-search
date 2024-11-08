@@ -293,9 +293,9 @@ input[type="text"] {
 
 /* Swiper styles */
 .swiper-container {
-  width: 170%;
+  width: 250%;
   height: 500px;
-  margin-left: -34%;
+  margin-left: -75%;
   overflow: hidden;
 }
 
@@ -447,4 +447,20 @@ input[type="text"] {
 /* Hide default scrollbar */
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* No Results Message Styling */
+.no-results {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: transparent;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 18px;
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+}
+
+.no-results p {
+    margin: 0;
 }

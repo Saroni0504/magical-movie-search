@@ -9,7 +9,7 @@ let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
 let currentTagIndex = 0; // Track the current set of displayed tags
 const TAGS_PER_BATCH = 10; // Number of tags per batch for display
-let currentSortingOption = 'release_date'; // Default sorting field
+let currentSortingOption = 'relevancy'; // Default sorting field
 let currentSortOrder = 'descending'; // Default sorting order
 let nResultsLimit = null; // Default limit for results
 let dateFilterValue = 'all_years'; // Default date filter
@@ -18,7 +18,7 @@ let fetchedMovies = []; // Store fetched movies globally
 
 // Initialize Swiper carousel
 const swiper = new Swiper('.swiper-container', {
-    slidesPerView: 5,                 // Number of slides to show at once when there are more than 5 slides
+    slidesPerView: 7,                 // Number of slides to show at once when there are more than 5 slides
     spaceBetween: 5,
     centeredSlides: false,            // Do not center slides by default
     centerInsufficientSlides: true,   // Automatically center slides if they are fewer than slidesPerView
@@ -93,9 +93,16 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Sort by field (e.g., date, budget, box office, profit)
+// Sort by field (e.g., date, budget, box office, profit, relevancy)
 function sortBy(field) {
     currentSortingOption = field;
+    
+    // If the selected sort option is 'relevancy', enforce descending order
+    if (field === 'relevancy') {
+        currentSortOrder = 'descending';
+        updateActiveSortOrder(); // Update UI to show 'Descending' as active
+    }
+    
     updateActiveSortOption(); // Mark selected option as active
     applyFiltersAndDisplay(); // Apply filters and display
 
@@ -253,6 +260,9 @@ async function selectTag(tagElement, tag) {
     selectedTag.classList.add('active-tag');
     selectedTag.classList.remove('previously-selected');
 
+    // Set the search bar text to the selected tag's name
+    searchText.value = tag;
+
     await fetchMoviesByTag(tag);
     swiper.slideTo(0, 0);
 }
@@ -323,6 +333,19 @@ function applyFiltersAndDisplay() {
 
 // Function to display movies in the carousel
 function displayMovies(movies) {
+    const noResultsMessage = document.getElementById('noResultsMessage');
+    const swiperContainer = document.getElementById('swiperContainer');
+
+    if (movies.length === 0) {
+        // No results found
+        swiperContainer.style.display = 'none';
+        noResultsMessage.style.display = 'block';
+    } else {
+        // Results found
+        swiperContainer.style.display = 'block';
+        noResultsMessage.style.display = 'none';
+    }
+
     carousel.innerHTML = '';
     movies.forEach(movie => {
         const slide = document.createElement('div');
@@ -394,6 +417,8 @@ function sortMovies(movies) {
             comparison = b.box_office - a.box_office;
         } else if (sortByField === 'profit') {
             comparison = b.profit - a.profit;
+        } else if (sortByField === 'relevancy') {
+            comparison = b.relevancy - a.relevancy; 
         }
 
         return currentSortOrder === 'ascending' ? comparison * -1 : comparison;

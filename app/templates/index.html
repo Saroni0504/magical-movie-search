@@ -38,8 +38,8 @@
                     <div class="filter-menu" id="dateMenu">
                         <div class="sort-options">
                             <div onclick="setDateFilter('all_years')">All years</div>
-                            <div onclick="setDateFilter('past_year')">Past year</div>
                             <div onclick="setDateFilter('past_decade')">Past decade</div>
+                            <div onclick="setDateFilter('past_year')">Past year</div>
                         </div>
                     </div>
                 </div>
@@ -49,6 +49,7 @@
                     <button class="sort-button" onclick="toggleSortMenu()">Sort by <span class="triangle">&#9660;</span></button>
                     <div class="sort-menu" id="sortMenu">
                         <div class="sort-options">
+                            <div onclick="sortBy('relevancy')">Relevancy</div> 
                             <div onclick="sortBy('release_date')">Date</div>
                             <div onclick="sortBy('budget')">Budget</div>
                             <div onclick="sortBy('box_office')">Box Office</div>
@@ -75,7 +76,7 @@
                     </div>
                 </div>
                 <div class="filter-container">
-                    <button class="filter-button" onclick="showAllMovies()">Show All Movies</button>
+                    <button class="filter-button" onclick="showAllMovies()">Show all Movies</button>
                 </div>
             </div>
         </div>
@@ -93,13 +94,18 @@
         </div>
 
         <!-- Swiper Carousel -->
-        <div class="swiper-container">
+        <div class="swiper-container" id="swiperContainer">
             <div class="swiper-wrapper" id="carousel">
                 <!-- Dynamic slides will be inserted here by JavaScript -->
             </div>
             <div class="swiper-pagination"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResultsMessage" class="no-results" style="display: none;">
+            <p>No movies found for your search. Please try broadening your search.</p>
         </div>
     </div>
     <!-- Scripts -->
