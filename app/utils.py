@@ -87,14 +87,14 @@ def processing_movie_record(movie_record: Series) -> dict:
     return movie_record_info
 
 
-def common_tags(n_occurences: int) -> list:
+def common_tags(tags_n_occurences: int) -> list:
     documents = get_documents()
     tags_frequency = documents["tags"].explode().value_counts()
     tags_frequency = tags_frequency.sample(
         n=len(tags_frequency),
         weights=tags_frequency.values ** 2,
     )
-    rel_tags = tags_frequency[(tags_frequency >= n_occurences)].index
+    rel_tags = tags_frequency[(tags_frequency >= tags_n_occurences)].index
     rel_tags = rel_tags[rel_tags != ""].to_list()
     return rel_tags
 
