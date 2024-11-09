@@ -1,42 +1,42 @@
 // DOM elements
-const searchText = document.getElementById('searchText');
-const carousel = document.getElementById('carousel');
-const tagContainer = document.querySelector('.tag-container');
-const showMoreButton = document.querySelector('.plus-circle');
-const filtersRow = document.getElementById('filtersRow');
+const searchText = document.getElementById("searchText");
+const carousel = document.getElementById("carousel");
+const tagContainer = document.querySelector(".tag-container");
+const showMoreButton = document.querySelector(".plus-circle");
+const filtersRow = document.getElementById("filtersRow");
 
 let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
 let currentTagIndex = 0; // Track the current set of displayed tags
 const TAGS_PER_BATCH = 10; // Number of tags per batch for display
-let currentSortingOption = 'relevancy'; // Default sorting field
-let currentSortOrder = 'descending'; // Default sorting order
-let nResultsLimit = null; // Default limit for results
-let dateFilterValue = 'all_years'; // Default date filter
-let openMenu = null; // Track the currently open menu
-let fetchedMovies = []; // Store fetched movies globally
+let currentSortingOption = "relevancy"; // Default filtering option
+let currentSortOrder = "descending"; 
+let nResultsLimit = null; 
+let dateFilterValue = "all_years"; 
+let openMenu = null; 
+let fetchedMovies = []; 
 
 // Initialize Swiper carousel
-const swiper = new Swiper('.swiper-container', {
-    slidesPerView: 7,                 // Number of slides to show at once when there are more than 5 slides
+const swiper = new Swiper(".swiper-container", {
+    slidesPerView: 7,                 // Number of slides to show at once when there are more than 7 slides
     spaceBetween: 5,
-    centeredSlides: false,            // Do not center slides by default
+    centeredSlides: false,           
     centerInsufficientSlides: true,   // Automatically center slides if they are fewer than slidesPerView
     loop: false,
     navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
     },
     watchOverflow: true,              // Hide navigation if slides are insufficient to scroll
 });
 
 // Close all dropdown menus
 function closeAllMenus() {
-    const menuIds = ['sortMenu', 'dateMenu', 'resultsMenu'];
+    const menuIds = ["sortMenu", "dateMenu", "resultsMenu"];
     menuIds.forEach(id => {
         const menu = document.getElementById(id);
         if (menu) {
-            menu.style.display = 'none';
+            menu.style.display = "none";
         }
     });
 }
@@ -49,46 +49,46 @@ function toggleFilters() {
 // Toggle specific menu visibility
 function toggleMenu(menuId) {
     const menu = document.getElementById(menuId);
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none';
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
         openMenu = null;
     } else {
         closeAllMenus();
-        menu.style.display = 'block';
+        menu.style.display = "block";
         openMenu = menu;
     }
 }
 
 // Toggle the visibility of the sort menu
 function toggleSortMenu() {
-    toggleMenu('sortMenu');
+    toggleMenu("sortMenu");
 }
 
 // Toggle the visibility of the date menu
 function toggleDateMenu() {
-    toggleMenu('dateMenu');
+    toggleMenu("dateMenu");
 }
 
 // Toggle the visibility of the results menu
 function toggleResultsMenu() {
-    toggleMenu('resultsMenu');
+    toggleMenu("resultsMenu");
 }
 
 // Close menus if clicking outside of them
-document.addEventListener('click', function(event) {
-    const isClickInsideFilter = ['dateMenu', 'sortMenu', 'resultsMenu'].some(menuId => {
+document.addEventListener("click", function(event) {
+    const isClickInsideFilter = ["dateMenu", "sortMenu", "resultsMenu"].some(menuId => {
         const menu = document.getElementById(menuId);
         return menu && menu.contains(event.target);
     });
 
     const isClickOnFilterButton = [
-        document.querySelector('#date-filter-container .filter-button'),
-        document.querySelector('#sorting-container .sort-button'),
-        document.querySelector('#n-results-container .filter-button')
+        document.querySelector("#date-filter-container .filter-button"),
+        document.querySelector("#sorting-container .sort-button"),
+        document.querySelector("#n-results-container .filter-button")
     ].some(button => button && button.contains(event.target));
 
     if (!isClickInsideFilter && !isClickOnFilterButton && openMenu) {
-        openMenu.style.display = 'none';
+        openMenu.style.display = "none";
         openMenu = null;
     }
 });
@@ -96,13 +96,6 @@ document.addEventListener('click', function(event) {
 // Sort by field (e.g., date, budget, box office, profit, relevancy)
 function sortBy(field) {
     currentSortingOption = field;
-    
-    // If the selected sort option is 'relevancy', enforce descending order
-    if (field === 'relevancy') {
-        currentSortOrder = 'descending';
-        updateActiveSortOrder(); // Update UI to show 'Descending' as active
-    }
-    
     updateActiveSortOption(); // Mark selected option as active
     applyFiltersAndDisplay(); // Apply filters and display
 
@@ -127,23 +120,23 @@ function setSortOrder(order) {
 
 // Helper function to mark the active sort option
 function updateActiveSortOption() {
-    document.querySelectorAll('.sort-options div').forEach(option => {
-        option.classList.remove('active');
+    document.querySelectorAll(".sort-options div").forEach(option => {
+        option.classList.remove("active");
     });
     const activeSortOption = document.querySelector(`.sort-options div[onclick="sortBy('${currentSortingOption}')"]`);
     if (activeSortOption) {
-        activeSortOption.classList.add('active');
+        activeSortOption.classList.add("active");
     }
 }
 
 // Helper function to mark the active sort order
 function updateActiveSortOrder() {
-    document.querySelectorAll('.sort-order div').forEach(option => {
-        option.classList.remove('active');
+    document.querySelectorAll(".sort-order div").forEach(option => {
+        option.classList.remove("active");
     });
     const activeSortOrder = document.querySelector(`.sort-order div[onclick="setSortOrder('${currentSortOrder}')"]`);
     if (activeSortOrder) {
-        activeSortOrder.classList.add('active');
+        activeSortOrder.classList.add("active");
     }
 }
 
@@ -163,35 +156,31 @@ function setDateFilter(value) {
 
 // Helper function to mark the active date option
 function updateActiveDateOption() {
-    document.querySelectorAll('#dateMenu div').forEach(option => {
-        option.classList.remove('active');
+    document.querySelectorAll("#dateMenu div").forEach(option => {
+        option.classList.remove("active");
     });
     const activeDateOption = document.querySelector(`#dateMenu div[onclick="setDateFilter('${dateFilterValue}')"]`);
     if (activeDateOption) {
-        activeDateOption.classList.add('active');
+        activeDateOption.classList.add("active");
     }
 }
 
 // Set results limit
 function setResultsLimit(value) {
-    nResultsLimit = value === 'all' ? null : parseInt(value);
+    nResultsLimit = value === "all" ? null : parseInt(value);
     updateActiveResultsOption();
     toggleResultsMenu();
-    applyFiltersAndDisplay(); // Apply filters and display
-
-    // Display limited results without refetching
-    displayMovies(nResultsLimit ? fetchedMovies.slice(0, nResultsLimit) : fetchedMovies);
+    applyFiltersAndDisplay(); // Apply filters, sort, limit, and display
 }
-
 // Helper function to mark the active results option
 function updateActiveResultsOption() {
-    document.querySelectorAll('#resultsMenu div').forEach(option => {
-        option.classList.remove('active');
+    document.querySelectorAll("#resultsMenu div").forEach(option => {
+        option.classList.remove("active");
     });
-    const value = nResultsLimit === null ? 'all' : nResultsLimit.toString();
+    const value = nResultsLimit === null ? "all" : nResultsLimit.toString();
     const activeResultsOption = document.querySelector(`#resultsMenu div[onclick="setResultsLimit('${value}')"]`);
     if (activeResultsOption) {
-        activeResultsOption.classList.add('active');
+        activeResultsOption.classList.add("active");
     }
 }
 
@@ -206,33 +195,33 @@ window.onload = function() {
 
 // Show all movies with an empty query and is_tag set to false
 function showAllMovies() {
-    searchText.value = ''; // Clear any existing text in the search box
+    searchText.value = ""; // Clear any existing text in the search box
     clearSelectedTag(); // Clear any selected tags
-    fetchMovies({ query: '', is_tag: false }); // Call endpoint with empty query
+    fetchMovies({ query: "", is_tag: false }); // Call endpoint with empty query
 }
 
 // Fetch tags from backend
 async function fetchTags() {
     try {
-        const response = await fetch('/fetch_common_tags');
+        const response = await fetch("/fetch_common_tags");
         const data = await response.json();
         allTags = data.tags;
         displayTags();
     } catch (error) {
-        console.error('Error fetching tags:', error);
+        console.error("Error fetching tags:", error);
     }
 }
 
 // Display tags in batches
 function displayTags() {
-    const row = document.createElement('div');
-    row.classList.add('tag-row');
+    const row = document.createElement("div");
+    row.classList.add("tag-row");
     tagContainer.appendChild(row);
 
     for (let i = currentTagIndex; i < currentTagIndex + TAGS_PER_BATCH && i < allTags.length; i++) {
         const tag = allTags[i];
-        const tagElement = document.createElement('span');
-        tagElement.classList.add('tag');
+        const tagElement = document.createElement("span");
+        tagElement.classList.add("tag");
         tagElement.textContent = tag;
         tagElement.onclick = () => selectTag(tagElement, tag);
         row.appendChild(tagElement);
@@ -240,7 +229,7 @@ function displayTags() {
 
     currentTagIndex += TAGS_PER_BATCH;
     if (currentTagIndex >= allTags.length) {
-        showMoreButton.style.display = 'none';
+        showMoreButton.style.display = "none";
     }
 }
 
@@ -252,13 +241,13 @@ function showMoreTags() {
 // Select or deselect a tag and fetch movies
 async function selectTag(tagElement, tag) {
     if (selectedTag) {
-        selectedTag.classList.add('previously-selected');
-        selectedTag.classList.remove('active-tag');
+        selectedTag.classList.add("previously-selected");
+        selectedTag.classList.remove("active-tag");
     }
 
     selectedTag = tagElement;
-    selectedTag.classList.add('active-tag');
-    selectedTag.classList.remove('previously-selected');
+    selectedTag.classList.add("active-tag");
+    selectedTag.classList.remove("previously-selected");
 
     // Set the search bar text to the selected tag's name
     searchText.value = tag;
@@ -270,8 +259,8 @@ async function selectTag(tagElement, tag) {
 // Clear selected tag styling
 function clearSelectedTag() {
     if (selectedTag) {
-        selectedTag.classList.remove('active-tag');
-        selectedTag.classList.remove('previously-selected');
+        selectedTag.classList.remove("active-tag");
+        selectedTag.classList.remove("previously-selected");
         selectedTag = null;
     }
 }
@@ -291,7 +280,7 @@ async function fetchMoviesByTag(tag) {
 }
 
 // Unified fetch function to interact with /search_relevancy endpoint
-async function fetchMovies({ query = '', is_tag = false } = {}) {
+async function fetchMovies({ query = "", is_tag = false } = {}) {
     try {
         // Construct query parameters
         const params = new URLSearchParams({
@@ -310,7 +299,7 @@ async function fetchMovies({ query = '', is_tag = false } = {}) {
         // Apply frontend filters, sort, and limit after fetching
         applyFiltersAndDisplay();
     } catch (error) {
-        console.error('Error fetching movies:', error);
+        console.error("Error fetching movies:", error);
         fetchedMovies = []; // Clear fetchedMovies on error
         displayMovies([]);
     }
@@ -331,25 +320,77 @@ function applyFiltersAndDisplay() {
     displayMovies(limitedMovies);
 }
 
+function formatCurrency(number) {
+    if (number === null || number === undefined) return null;
+
+    const absNumber = Math.abs(number);
+    const sign = number < 0 ? "-" : "";
+
+    if (absNumber >= 1_000_000_000) { // Billions
+        if (absNumber % 1_000_000_000 === 0) {
+            return `${sign}${absNumber / 1_000_000_000}B`;
+        } else {
+            return `${sign}${(absNumber / 1_000_000_000).toFixed(1)}B`;
+        }
+    } else if (absNumber >= 1_000_000) { // Millions
+        if (absNumber % 1_000_000 === 0) {
+            return `${sign}${absNumber / 1_000_000}M`;
+        } else {
+            return `${sign}${(absNumber / 1_000_000).toFixed(1)}M`;
+        }
+    } else if (absNumber >= 1_000) { // Thousands
+        if (absNumber % 1_000 === 0) {
+            return `${sign}${absNumber / 1_000}K`;
+        } else {
+            return `${sign}${(absNumber / 1_000).toFixed(1)}K`;
+        }
+    } else { // Under a thousand
+        return `${sign}${number.toLocaleString()}`;
+    }
+}
+
+
 // Function to display movies in the carousel
 function displayMovies(movies) {
-    const noResultsMessage = document.getElementById('noResultsMessage');
-    const swiperContainer = document.getElementById('swiperContainer');
+    const noResultsMessage = document.getElementById("noResultsMessage");
+    const swiperContainer = document.getElementById("swiperContainer");
 
     if (movies.length === 0) {
         // No results found
-        swiperContainer.style.display = 'none';
-        noResultsMessage.style.display = 'block';
+        swiperContainer.style.display = "none";
+        noResultsMessage.style.display = "block";
     } else {
         // Results found
-        swiperContainer.style.display = 'block';
-        noResultsMessage.style.display = 'none';
+        swiperContainer.style.display = "block";
+        noResultsMessage.style.display = "none";
     }
 
-    carousel.innerHTML = '';
+    carousel.innerHTML = "";
     movies.forEach(movie => {
-        const slide = document.createElement('div');
-        slide.classList.add('swiper-slide');
+        const slide = document.createElement("div");
+        slide.classList.add("swiper-slide");
+
+        // Dynamically build the budget, box office, and profit info
+        let financialInfo = "";
+
+        const formattedBudget = formatCurrency(movie.budget);
+        const formattedBoxOffice = formatCurrency(movie.box_office);
+        const formattedProfit = formatCurrency(movie.profit);
+
+        if (formattedBudget && formattedBudget !== "0") {
+            financialInfo += `Budget: ${formattedBudget}<br>`;
+        }
+
+        if (formattedBoxOffice && formattedBoxOffice !== "0") {
+            financialInfo += `Box Office: ${formattedBoxOffice}<br>`;
+        }
+
+        if (formattedProfit && formattedProfit !== "0") {
+            financialInfo += `Profit: ${formattedProfit}`;
+        }
+
+        // Only add <h2> element if financialInfo is not empty
+        const financialInfoHTML = financialInfo ? `<h2><span class="smaller-text">${financialInfo}</span></h2>` : '';
 
         // Set the inner HTML of the slide
         slide.innerHTML = `
@@ -358,6 +399,7 @@ function displayMovies(movies) {
                 <div class="info">
                     <h1>${movie.title}</h1>
                     <h2>${movie.release_year} ● ${movie.running_time} minutes<br>${movie.genre.join(' ● ')}</h2>
+                    ${financialInfoHTML}
                     <h2><span class="smaller-text">${movie.tags.join(' ○ ')}</span><br></h2>
                     <p>
                         ${movie.summary}
@@ -366,11 +408,11 @@ function displayMovies(movies) {
             </div>`;
 
         // Access the .card element within the slide
-        const card = slide.querySelector('.card');
+        const card = slide.querySelector(".card");
 
         // Add event listener to reset scroll position on mouse leave
-        card.addEventListener('mouseleave', () => {
-            const info = card.querySelector('.info');
+        card.addEventListener("mouseleave", () => {
+            const info = card.querySelector(".info");
             info.scrollTop = 0; // Reset scroll position to top
         });
 
@@ -409,25 +451,25 @@ function sortMovies(movies) {
 
     movies.sort((a, b) => {
         let comparison = 0;
-        if (sortByField === 'release_date') {
+        if (sortByField === "release_date") {
             comparison = new Date(b.release_date) - new Date(a.release_date);
-        } else if (sortByField === 'budget') {
+        } else if (sortByField === "budget") {
             comparison = b.budget - a.budget;
-        } else if (sortByField === 'box_office') {
+        } else if (sortByField === "box_office") {
             comparison = b.box_office - a.box_office;
-        } else if (sortByField === 'profit') {
+        } else if (sortByField === "profit") {
             comparison = b.profit - a.profit;
-        } else if (sortByField === 'relevancy') {
+        } else if (sortByField === "relevancy") {
             comparison = b.relevancy - a.relevancy; 
         }
 
-        return currentSortOrder === 'ascending' ? comparison * -1 : comparison;
+        return currentSortOrder === "ascending" ? comparison * -1 : comparison;
     });
 }
 
 // Trigger search on Enter key press
-searchText.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter'){
+searchText.addEventListener("keypress", (event) => {
+    if (event.key === "Enter"){
         searchMovie();
     } 
 });

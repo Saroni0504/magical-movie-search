@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags and links -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical Movie Search</title>
@@ -17,22 +16,18 @@
     <div class="container">
         <div class="logo-container">
             <img src="/static/images/disney_logo.png" alt="Disney Logo" class="logo">
-            <div class="fireworks"></div> <!-- Fireworks effect div -->
+            <div class="fireworks"></div>
         </div>
         <h1>Magical Movie Search</h1>
 
         <div class="search-box">
             <div class="search-box-inline">
-                <!-- Search icon -->
                 <span class="material-icons search-icon">search</span>
-                <!-- Text input for search -->
                 <input type="text" id="searchText" placeholder="Enter text to find a movie" onkeyup="checkEnter(event)">
-                <!-- Tune icon -->
                 <span class="material-icons tune-icon" onclick="toggleFilters()">tune</span>
             </div>
         
             <div class="filters-row" id="filtersRow">
-                <!-- Date Filter Button -->
                 <div class="filter-container" id="date-filter-container">
                     <button class="filter-button" onclick="toggleDateMenu()">Date Filter <span class="triangle">&#9660;</span></button>
                     <div class="filter-menu" id="dateMenu">
@@ -43,8 +38,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Sorting Button -->
+
                 <div class="filter-container" id="sorting-container">
                     <button class="sort-button" onclick="toggleSortMenu()">Sort by <span class="triangle">&#9660;</span></button>
                     <div class="sort-menu" id="sortMenu">
@@ -62,8 +56,7 @@
                         </div>
                     </div>
                 </div>
-            
-                <!-- Results Limit Button -->
+
                 <div class="filter-container" id="n-results-container">
                     <button class="filter-button" onclick="toggleResultsMenu()">Number of results <span class="triangle">&#9660;</span></button>
                     <div class="filter-menu" id="resultsMenu">
@@ -81,7 +74,6 @@
             </div>
         </div>
 
-        <!-- Tag Section -->
         <div class="tag-wrapper">
             <div class="tag-container">
                 <!-- Tags will be dynamically generated here -->
@@ -103,12 +95,10 @@
             <div class="swiper-button-prev"></div>
         </div>
 
-        <!-- No Results Message -->
         <div id="noResultsMessage" class="no-results" style="display: none;">
             <p>No movies found for your search. Please try broadening your search.</p>
         </div>
     </div>
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script src="/static/js/script.js"></script>
 </body>

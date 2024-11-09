@@ -10,7 +10,6 @@
 }
 
 body, html {
-  font-family: 'Satisfy', cursive;
   background: linear-gradient(to right, #064675, #110076);
   color: #333;
   height: 100%;
@@ -28,7 +27,7 @@ body, html {
 h1 {
   color: #ffffff;
   font-size: 35px;
-  font-family: 'Satisfy', cursive;
+  font-family: "Satisfy", cursive;
 }
 
 .search-box {
@@ -89,7 +88,7 @@ input[type="text"] {
     font-size: 15px;
     cursor: pointer;
     color: #ffffff;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     padding: 4px 8px;
 }
 
@@ -101,7 +100,7 @@ input[type="text"] {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     width: 150px;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     font-size: 14px;
     color: black;
 }
@@ -130,22 +129,21 @@ input[type="text"] {
     font-size: 15px;
     cursor: pointer;
     color: #ffffff;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     padding: 4px 8px;
 }
 
-/* Sort menu styling */
 .sort-menu {
     display: none;
     position: absolute;
-    top: 100%; /* Position below the button */
+    top: 100%; 
     left: 0;
     background-color: #ffffff;
     border: 1px solid #ddd;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     width: 150px;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     font-size: 14px;
     color: black;
 }
@@ -161,14 +159,6 @@ input[type="text"] {
    font-weight: bold;
 }
 
-/* Divider between sort options and order */
-.sort-menu hr {
-    margin: 4px 0;
-    border: none;
-    border-top: 1px solid #ddd;
-}
-
-/* Highlight the active option in the sort menu */
 .filter-menu div.active,
 .sort-options div.active,
 .sort-order div.active {
@@ -179,18 +169,17 @@ input[type="text"] {
 .filter-menu div.active::before,
 .sort-options div.active::before,
 .sort-order div.active::before {
-    content: '●';
+    content: "●";
     color: black;
-    margin-right: 5px; /* Adjust as needed */
+    margin-right: 5px; 
 }
 
 .triangle {
-    font-size: 0.6em; /* Adjust size as needed */
+    font-size: 0.6em; 
     display: inline-block;
-    transform: scale(1.3, 0.7); /* Adjust to align vertically with text */
+    transform: scale(1.3, 0.7);
   }
 
-/* Tag styles */
 .tag-wrapper {
   display: flex;
   flex-direction: column;
@@ -223,7 +212,7 @@ input[type="text"] {
 
 /* Styling for inactive tags */
 .tag-container span.tag.previously-selected {
-    color: #ffffff; /* Inactive color */
+    color: #ffffff;
 }
 
 .tag-container span.tag:not(:first-child)::before {
@@ -234,7 +223,6 @@ input[type="text"] {
   vertical-align: middle;
 }
 
-/* Tooltip styles */
 .tooltip-container {
   position: relative;
   display: inline-block;
@@ -313,7 +301,7 @@ input[type="text"] {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start; 
   width: 250px;
   height: 70%;
   padding: 20px;
@@ -401,7 +389,7 @@ input[type="text"] {
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: #4a90e2;
+  color: #e2e2e2 !important;
 }
 
 .logo-container {
@@ -424,7 +412,7 @@ input[type="text"] {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    background-image: url('/static/images/fireworks.gif'); /* Path to the fireworks GIF */
+    background-image: url("/static/images/fireworks.gif");
     background-size: cover;
     opacity: 0;
     pointer-events: none;
@@ -449,7 +437,6 @@ input[type="text"] {
   display: none;
 }
 
-/* No Results Message Styling */
 .no-results {
     margin-top: 20px;
     padding: 20px;
