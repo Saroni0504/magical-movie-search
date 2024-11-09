@@ -48,3 +48,4 @@ jobs:
         service-ports: "8000:http"
         service-routes: "/:8000"
         skip-cache: true
+        service-instance-type: free
