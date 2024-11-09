@@ -4,6 +4,7 @@ const carousel = document.getElementById("carousel");
 const tagContainer = document.querySelector(".tag-container");
 const showMoreButton = document.querySelector(".plus-circle");
 const filtersRow = document.getElementById("filtersRow");
+const IMAGE_BASE_PATH = "https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/develop/app/static/images/";
 
 let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
@@ -18,18 +19,24 @@ let fetchedMovies = [];
 
 // Initialize Swiper carousel
 const swiper = new Swiper(".swiper-container", {
-    slidesPerView: 7,                 // Number of slides to show at once when there are more than 7 slides
+    slidesPerView: "auto",   // Allows Swiper to automatically calculate slides per view based on container width
     spaceBetween: 5,
-    centeredSlides: false,           
-    centerInsufficientSlides: true,   // Automatically center slides if they are fewer than slidesPerView
+    centeredSlides: false,
+    centerInsufficientSlides: true,
     loop: false,
+    breakpoints: {            // Define specific settings for different screen widths
+        320: { slidesPerView: 1 },
+        480: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 5 },
+        1440: { slidesPerView: 7 },
+    },
     navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
     },
-    watchOverflow: true,              // Hide navigation if slides are insufficient to scroll
+    watchOverflow: true,
 });
-
 // Close all dropdown menus
 function closeAllMenus() {
     const menuIds = ["sortMenu", "dateMenu", "resultsMenu"];
@@ -356,11 +363,9 @@ function displayMovies(movies) {
     const swiperContainer = document.getElementById("swiperContainer");
 
     if (movies.length === 0) {
-        // No results found
         swiperContainer.style.display = "none";
         noResultsMessage.style.display = "block";
     } else {
-        // Results found
         swiperContainer.style.display = "block";
         noResultsMessage.style.display = "none";
     }
@@ -370,59 +375,64 @@ function displayMovies(movies) {
         const slide = document.createElement("div");
         slide.classList.add("swiper-slide");
 
-        // Dynamically build the budget, box office, and profit info
         let financialInfo = "";
-
         const formattedBudget = formatCurrency(movie.budget);
         const formattedBoxOffice = formatCurrency(movie.box_office);
         const formattedProfit = formatCurrency(movie.profit);
 
-        if (formattedBudget && formattedBudget !== "0") {
-            financialInfo += `Budget: ${formattedBudget}<br>`;
-        }
+        if (formattedBudget && formattedBudget !== "0") financialInfo += `Budget: ${formattedBudget}<br>`;
+        if (formattedBoxOffice && formattedBoxOffice !== "0") financialInfo += `Box Office: ${formattedBoxOffice}<br>`;
+        if (formattedProfit && formattedProfit !== "0") financialInfo += `Profit: ${formattedProfit}`;
 
-        if (formattedBoxOffice && formattedBoxOffice !== "0") {
-            financialInfo += `Box Office: ${formattedBoxOffice}<br>`;
-        }
-
-        if (formattedProfit && formattedProfit !== "0") {
-            financialInfo += `Profit: ${formattedProfit}`;
-        }
-
-        // Only add <h2> element if financialInfo is not empty
         const financialInfoHTML = financialInfo ? `<h2><span class="smaller-text">${financialInfo}</span></h2>` : '';
 
-        // Set the inner HTML of the slide
+        // Create the loading message element
+        const loadingMessage = document.createElement("div");
+        loadingMessage.classList.add("loading-message");
+        loadingMessage.textContent = "Loading...";
+
+        // Set up the card's HTML with the loading message
         slide.innerHTML = `
             <div class="card">
-                <img src="${movie.image_path}" alt="${movie.title}" />
+                <img src="${movie.image_path}" alt="${movie.title}" style="display: none;" />
                 <div class="info">
                     <h1>${movie.title}</h1>
                     <h2>${movie.release_year} ● ${movie.running_time} minutes<br>${movie.genre.join(' ● ')}</h2>
                     ${financialInfoHTML}
                     <h2><span class="smaller-text">${movie.tags.join(' ○ ')}</span><br></h2>
-                    <p>
-                        ${movie.summary}
-                    </p>
+                    <p>${movie.summary}</p>
                 </div>
             </div>`;
-
-        // Access the .card element within the slide
+        
         const card = slide.querySelector(".card");
+        const img = slide.querySelector("img");
+        
+        card.appendChild(loadingMessage);
+        loadingMessage.style.display = "block"; // Show the loading message initially
 
-        // Add event listener to reset scroll position on mouse leave
+        // When image loads, hide the loading message and show the image
+        img.onload = () => {
+            loadingMessage.style.display = "none";
+            img.style.display = "block";
+        };
+
+        // In case of an error loading the image, retain the loading message
+        img.onerror = () => {
+            loadingMessage.textContent = "Image not available";
+        };
+
         card.addEventListener("mouseleave", () => {
             const info = card.querySelector(".info");
-            info.scrollTop = 0; // Reset scroll position to top
+            info.scrollTop = 0;
         });
 
-        // Append the slide to the carousel
         carousel.appendChild(slide);
     });
 
     swiper.slideTo(0, 0);
     swiper.update();
 }
+
 
 // Filter movies based on the selected date filter
 function filterMoviesByDate(movies) {
