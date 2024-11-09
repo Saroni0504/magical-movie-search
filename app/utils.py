@@ -8,9 +8,10 @@ from pandas import (
 )
 
 from app.config import Config
-from app.constants import IMAGES_PATH
+from app.constants import IMAGES_PATH_GITHUB
 from app.search_engine import SearchEngine
 from data.constants import DATASET_GITHUB
+
 
 _documents = None
 _search_engine = None
@@ -69,7 +70,7 @@ def fetch_query_results(query: str, k: int, score_filter: bool) -> list[tuple]:
 def processing_movie_record(movie_record: Series) -> dict:
     release_year = movie_record["release_date"].year
     image_name = (movie_record["movie_id"] + "." + movie_record["image_format"])
-    image_path = f"{IMAGES_PATH}/{image_name}"
+    image_path = f"{IMAGES_PATH_GITHUB}/{image_name}"
     movie_record_info = {
         "title": movie_record["title"],
         "release_date": movie_record["release_date"],
