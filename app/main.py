@@ -1,3 +1,5 @@
+import os
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,8 +34,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "app/static")), name="static")
+templates = Jinja2Templates(directory=os.path.join(os.getcwd(), "app/templates"))
 
 
 @app.get("/")
