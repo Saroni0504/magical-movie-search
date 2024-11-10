@@ -4,7 +4,6 @@ const carousel = document.getElementById("carousel");
 const tagContainer = document.querySelector(".tag-container");
 const showMoreButton = document.querySelector(".plus-circle");
 const filtersRow = document.getElementById("filtersRow");
-const IMAGE_BASE_PATH = "https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/develop/app/static/images/";
 
 let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
