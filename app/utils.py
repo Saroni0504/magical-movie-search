@@ -39,7 +39,7 @@ def get_search_engine() -> SearchEngine:
     global _search_engine
     if _search_engine is None:
         documents = get_documents()
-        _search_engine = SearchEngine(text_proccessing=Config.text_processing)
+        _search_engine = SearchEngine(text_processing=Config.text_processing)
         content = list(documents[["url", "description"]].values)
         _search_engine.bulk_index(content)
     return _search_engine
