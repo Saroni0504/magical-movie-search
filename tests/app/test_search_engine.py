@@ -1,4 +1,5 @@
 import pytest
+import spacy
 
 from app.search_engine import (
     remove_stopwords,
@@ -8,12 +9,15 @@ from app.search_engine import (
 
 
 class TestTextProcessing:
+    # Load spaCy model once for all tests
+    nlp = spacy.load("en_core_web_sm")
+
     # Test Scenarios and outputs for Stemming, Lemmatizing
     test_data = {
         "I change cloths": ["i chang cloth", "I change cloth"],
-        "They eat a fruit": ["they eat a fruit", "They eat a fruit"],
+        "They eat a fruit": ["they eat a fruit", "they eat a fruit"],
         "They eating a fruit and a veggie": [
-            "they eat a fruit and a veggi", "They eat a fruit and a veggie"],
+            "they eat a fruit and a veggi", "they eat a fruit and a veggie"],
     }
 
     @pytest.mark.parametrize("input_text, outputs", test_data.items())
@@ -22,7 +26,7 @@ class TestTextProcessing:
 
     @pytest.mark.parametrize("input_text, outputs", test_data.items())
     def test_lemmatizing(self, input_text, outputs):
-        assert lemmatizing(input_text) == outputs[1]
+        assert lemmatizing(input_text, self.nlp) == outputs[1]
 
     @pytest.mark.parametrize("input_text, expected_output", [
         ("and and and", ""),
