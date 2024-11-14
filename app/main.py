@@ -1,3 +1,6 @@
+import os
+import uvicorn
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,6 +42,10 @@ templates = Jinja2Templates(directory="app/templates")
 @app.get("/")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 
 @app.get("/get_topk_documents")
