@@ -8,12 +8,11 @@ from fastapi.requests import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-
 from app.config import Config
 from app.utils import (
     common_tags,
     get_search_engine,
-    response_search_relevancy,
+    response_search_movie,
     topk_documents,
 )
 
@@ -43,10 +42,6 @@ templates = Jinja2Templates(directory="app/templates")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
-    uvicorn.run(app, host="0.0.0.0", port=port)
-
 
 @app.get("/get_topk_documents")
 async def get_topk_documents(query: str, k: int) -> dict:
@@ -62,9 +57,9 @@ async def fetch_common_tags(tags_n_occurences: int = Config.tags_n_occurences):
     return {"tags": tags}
 
 
-@app.get("/search_relevancy")
-async def search_relevance(query: str, is_tag: bool, k: int = Config.k) -> list[dict]:
-    response = response_search_relevancy(query=query, is_tag=is_tag, k=Config.k)
+@app.get("/search_disney_movie")
+async def search_movie(query: str, is_tag: bool, k: int = Config.k) -> list[dict]:
+    response = response_search_movie(query=query, is_tag=is_tag, k=Config.k)
     if not response:
         return [{"result": "Not found"}]
     return response
@@ -73,3 +68,8 @@ async def search_relevance(query: str, is_tag: bool, k: int = Config.k) -> list[
 @app.get("/status")
 async def get_status():
     return {"status": "OK"}
+
+# For deployment
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
+    uvicorn.run(app, host="0.0.0.0", port=port)
