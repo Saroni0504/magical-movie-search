@@ -1,8 +1,10 @@
-# Disney Movie Recommender
+# Magical Movie Search
 
 ## Overview
 
-This Python project allows users to search for the most relevant Disney movies using free-text queries. The data module leverages the Requests and BeautifulSoup libraries to scrape Disney movie information from Wikipedia, which is then processed and enhanced with summaries via the OpenAI API. The dataset is indexed using the BM25 algorithm to enable efficient searching and is made accessible through FastAPI endpoints.
+This project allows users to search for the most relevant Disney movies using free-text queries. The data module leverages the Requests and BeautifulSoup libraries to scrape Disney movie information from Wikipedia, which is then processed and enhanced with summaries, movie genres and movie related tags via the OpenAI API. The dataset is processed with NLTK's StopWords and Stemming or SpaCy's Lemmatizing techniques, and is indexed using the BM25 algorithm to enable efficient searching and is made accessible through a FastAPI endpoint.
+
+This application is built on Python using FastAPI, with a frontend developed in HTML, CSS and JavaScript. It offers a user-friendly interface that allows to search the most relevant results through a free-text query or by selecting from movie related tags. In addition, users can filter the results based on release dates, budget, box office and profit. 
 
 ![Disney Image](image.png)
 
@@ -19,12 +21,15 @@ This Python project allows users to search for the most relevant Disney movies u
      - Box Office Revenue
      - Budget
      - Running Time
+     - Starring
+     - Image
 
 3. **Extracting Additional Information**
    - Utilizing OpenAI API to extract additional information based on the movie plot such as:
      - Genre
      - Tags
      - Summary
+   - Using functions to calculate informative details about the profit of each movie and changing format of release dates and running time.
 
 4. **Generating a Dataset**
    - Compile the scraped information and the movie summaries into a structured dataset.
@@ -33,11 +38,13 @@ This Python project allows users to search for the most relevant Disney movies u
 
 #### `search_disney_movie`
 
-- **Description:** Search for a Disney movie based on a user query. Utilizes the BM25 algorithm for ranking.
+- **Description:** Search for a Disney movie based on a user query or selected tag. Utilizes the BM25 algorithm for ranking.
 - **Method:** `GET`
 - **Parameters:** 
   - `query` (string): The search query (e.g., text query, movie title or keywords)
-- **Response:** JSON object with movie title, genre, tags and summary
+  - `is_tag` (boolean): If the endpoint was triggered by selecting tag from the frontend or not
+  - `k` (integer): The number of top documents to retrieve
+- **Response:** JSON object with movie title, release date, release year, running time, genre, tags, summary, image and more
 
 #### `get_topk_documents`
 
@@ -46,6 +53,14 @@ This Python project allows users to search for the most relevant Disney movies u
 - **Parameters:** 
   - `k` (integer): The number of top documents to retrieve
 - **Response:** JSON object with top-k movie urls and their scores
+
+#### `fetch_common_tags`
+
+- **Description:** Fetches tags from the dataset that are in n_occurances movies or more.
+- **Method:** `GET`
+- **Parameters:** 
+  - `tags_n_occurences` (integer): The number of movies the tag is in 
+- **Response:** List of strings with the tags 
 
 
 
@@ -93,13 +108,13 @@ Follow these steps to set up and run the project:
 
 1. **Navigate to the Project Directory:**
    ```bash
-   cd DisneyMovieRecommender
+   cd magical-movie-search
    ```
 
 2. **Clone the Repository:**
 
    ```bash
-   git clone git@github.com:Saroni0504/DisneyMovieRecommender.git
+   git clone git@github.com:Saroni0504/magical-movie-search.git
    ```
 
 3. **Create a Virtual Environment:**
