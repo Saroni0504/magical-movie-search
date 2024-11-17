@@ -8,7 +8,7 @@ const filtersRow = document.getElementById("filtersRow");
 let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
 let currentTagIndex = 0; // Track the current set of displayed tags
-const TAGS_PER_BATCH = 10; // Number of tags per batch for display
+const TAGS_PER_BATCH = 9; // Number of tags per batch for display
 let currentSortingOption = "relevancy"; // Default filtering option
 let currentSortOrder = "descending"; 
 let nResultsLimit = null; 
@@ -18,17 +18,32 @@ let fetchedMovies = [];
 
 // Initialize Swiper carousel
 const swiper = new Swiper(".swiper-container", {
-    slidesPerView: "auto",   // Allows Swiper to automatically calculate slides per view based on container width
-    spaceBetween: 5,
-    centeredSlides: false,
+    slidesPerView: "auto",   
+    centeredSlides: true,
+    centeredSlidesBounds: true,
     centerInsufficientSlides: true,
     loop: false,
-    breakpoints: {            // Define specific settings for different screen widths
-        320: { slidesPerView: 1 },
-        480: { slidesPerView: 2 },
-        768: { slidesPerView: 3 },
-        1024: { slidesPerView: 5 },
-        1440: { slidesPerView: 7 },
+    breakpoints: {
+        320: { 
+            slidesPerView: 1, 
+            spaceBetween: 5 
+        },
+        480: { 
+            slidesPerView: 1.2, 
+            spaceBetween: 10 
+        },
+        768: { 
+            slidesPerView: 2, 
+            spaceBetween: 15 
+        },
+        1024: { 
+            slidesPerView: 3, 
+            spaceBetween: 20 
+        },
+        1440: { 
+            slidesPerView: 7, 
+            spaceBetween: 30 
+        },
     },
     navigation: {
         nextEl: ".swiper-button-next",
@@ -294,7 +309,7 @@ async function fetchMovies({ query = "", is_tag = false } = {}) {
             is_tag: is_tag
         });
 
-        const endpoint = `/search_relevancy?${params.toString()}`;
+        const endpoint = `/search_disney_movie?${params.toString()}`;
         const response = await fetch(endpoint);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
