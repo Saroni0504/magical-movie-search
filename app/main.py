@@ -65,3 +65,12 @@ async def search_movie(query: str, is_tag: bool, k: int = Config.k) -> list[dict
 @app.get("/status")
 async def get_status():
     return {"status": "OK"}
+
+
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """
+    Lightweight health check endpoint.
+    Returns a simple JSON response to indicate the app is running.
+    """
+    return {"status": "ok"}
