@@ -1,3 +1,6 @@
+import os
+import uvicorn
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -65,3 +68,8 @@ async def search_movie(query: str, is_tag: bool, k: int = Config.k) -> list[dict
 @app.get("/status")
 async def get_status():
     return {"status": "OK"}
+
+# For deployment
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
+    uvicorn.run(app, host="0.0.0.0", port=port)
