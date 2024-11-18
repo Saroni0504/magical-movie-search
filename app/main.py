@@ -69,6 +69,12 @@ async def search_movie(query: str, is_tag: bool, k: int = Config.k) -> list[dict
 async def get_status():
     return {"status": "OK"}
 
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+
 # For deployment
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
