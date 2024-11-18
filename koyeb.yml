@@ -10,7 +10,7 @@ routes:
     methods:
       - GET
 healthcheck:
-  type: http
-  path: /
+  type: tcp
+  port: 8000
   interval: 5s
   timeout: 3s
