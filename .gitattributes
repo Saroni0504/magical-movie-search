@@ -8,3 +8,8 @@ app/static/images/**/*.gif filter=lfs diff=lfs merge=lfs -text
 app/images/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 app/images/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 app/images/**/*.png filter=lfs diff=lfs merge=lfs -text
+disney_logo.png filter=lfs diff=lfs merge=lfs -text
+fireworks.gif filter=lfs diff=lfs merge=lfs -text
+new-ideas-icon.png filter=lfs diff=lfs merge=lfs -text
+disney_logo_icon.png filter=lfs diff=lfs merge=lfs -text
+app/static/images/movies/**/* filter=lfs diff=lfs merge=lfs -text
