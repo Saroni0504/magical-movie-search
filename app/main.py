@@ -17,15 +17,15 @@ from app.utils import (
 )
 
 
-# Lazy initialization for the application lifecycle
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Only initialize when necessary
+    # Startup logic: Load the documents and create the search engine
+    get_search_engine()
     yield
 
 app = FastAPI(lifespan=lifespan)
 
-# Middleware configuration
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -34,7 +34,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static files and templates
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
@@ -54,12 +53,13 @@ async def get_topk_documents(query: str, k: int) -> dict:
 
 @app.get("/fetch_common_tags")
 async def fetch_common_tags(tags_n_occurences: int = Config.tags_n_occurences):
-    return {"tags": common_tags(tags_n_occurences=tags_n_occurences)}
+    tags = common_tags(tags_n_occurences=tags_n_occurences)
+    return {"tags": tags}
 
 
 @app.get("/search_disney_movie")
 async def search_movie(query: str, is_tag: bool, k: int = Config.k) -> list[dict]:
-    response = response_search_movie(query=query, is_tag=is_tag, k=k)
+    response = response_search_movie(query=query, is_tag=is_tag, k=Config.k)
     if not response:
         return [{"result": "Not found"}]
     return response
@@ -77,5 +77,5 @@ def health_check():
 
 # For deployment
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
+    port = int(os.environ.get("PORT", 8000))  # Use PORT env variable or default to 8000
     uvicorn.run(app, host="0.0.0.0", port=port)
