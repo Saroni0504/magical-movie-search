@@ -1,5 +1,9 @@
 BASE_URL = "https://en.wikipedia.org"
-DATASET_NAME = "disney_movies_dataset"
+DATASET_GITHUB = (
+    "https://media.githubusercontent.com/media/"
+    "Saroni0504/magical-movie-search/refs/heads/develop/data/disney_movies_dataset.csv"
+    # TODO: change to main branch
+)
 DATASET_PATH = "data"
 MOVIE_INFOBOX_HEADERS = [
     ("Running time", "str"),
