@@ -12,23 +12,21 @@ from app.constants import IMAGES_PATH_GITHUB
 from app.search_engine import SearchEngine
 from data.constants import DATASET_GITHUB
 
-
 _documents = None
 _search_engine = None
 
 
 def list_parser(stringified_list: str) -> list:
-    lst = stringified_list.strip('"[]').replace("'", "").split(",")
-    return [item.strip() for item in lst]
+    return [
+        item.strip()
+        for item in stringified_list.strip('"[]').replace("'", "").split(",")
+    ]
 
 
 def get_documents() -> DataFrame:
     global _documents
     if _documents is None:
-        _documents = read_csv(
-            DATASET_GITHUB,
-            parse_dates=["release_date"],
-        ).fillna("").sort_values(by="release_date", ascending=False)
+        _documents = read_csv(DATASET_GITHUB, parse_dates=["release_date"]).fillna("")
         _documents = _documents[_documents["description"] != ""]
         for column in ["tags", "genre"]:
             _documents[column] = _documents[column].apply(list_parser)
@@ -46,12 +44,7 @@ def get_search_engine() -> SearchEngine:
 
 
 def topk_documents(query_results: dict, k: int) -> list[tuple]:
-    documents = sorted(
-        query_results.items(),
-        key=lambda item: item[1],
-        reverse=True,
-    )
-    return documents[:k]
+    return sorted(query_results.items(), key=lambda item: item[1], reverse=True)[:k]
 
 
 def fetch_query_results(query: str, k: int, score_filter: bool) -> list[tuple]:
