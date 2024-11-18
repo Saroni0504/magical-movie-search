@@ -10,7 +10,7 @@ from pandas import (
 from app.config import Config
 from app.constants import IMAGES_PATH_GITHUB
 from app.search_engine import SearchEngine
-from data.constants import DATASET_GITHUB
+from data.constants import DATASET_PATH, DATASET_NAME
 
 _documents = None
 _search_engine = None
@@ -26,7 +26,10 @@ def list_parser(stringified_list: str) -> list:
 def get_documents() -> DataFrame:
     global _documents
     if _documents is None:
-        _documents = read_csv(DATASET_GITHUB, parse_dates=["release_date"]).fillna("")
+        _documents = read_csv(
+            f"{DATASET_PATH}/{DATASET_NAME}.csv",
+            parse_dates=["release_date"]
+            ).fillna("")
         _documents = _documents[_documents["description"] != ""]
         for column in ["tags", "genre"]:
             _documents[column] = _documents[column].apply(list_parser)
