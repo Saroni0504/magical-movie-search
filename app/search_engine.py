@@ -5,24 +5,24 @@ from enum import Enum
 from math import log
 from string import punctuation
 
-from nltk.corpus import stopwords
-from nltk.stem.snowball import SnowballStemmer
+# from nltk.corpus import stopwords
+# from nltk.stem.snowball import SnowballStemmer
 
 
-def remove_stopwords(input_string: str) -> str:
-    stop_words = set(stopwords.words("english"))
-    words = input_string.split()
-    filtered_words = [word for word in words if word.lower() not in stop_words]
-    filtered_text = " ".join(filtered_words)
-    return filtered_text
+# def remove_stopwords(input_string: str) -> str:
+#     stop_words = set(stopwords.words("english"))
+#     words = input_string.split()
+#     filtered_words = [word for word in words if word.lower() not in stop_words]
+#     filtered_text = " ".join(filtered_words)
+#     return filtered_text
 
 
-def stemming(input_string: str) -> str:
-    stemmer = SnowballStemmer("english", ignore_stopwords=False)
-    words = input_string.split()  # alternative approach - from nltk.tokenize import word_tokenize
-    stemmed_words = [stemmer.stem(word) for word in words]
-    filtered_text = " ".join(stemmed_words)
-    return filtered_text
+# def stemming(input_string: str) -> str:
+#     stemmer = SnowballStemmer("english", ignore_stopwords=False)
+#     words = input_string.split()  # alternative approach - from nltk.tokenize import word_tokenize
+#     stemmed_words = [stemmer.stem(word) for word in words]
+#     filtered_text = " ".join(stemmed_words)
+#     return filtered_text
 
 
 def lemmatizing(input_string: str, nlp) -> str:
@@ -105,9 +105,9 @@ class SearchEngine:
 
     def search(self, query: str) -> dict[str, float]:
         normalize_query = normalize_string(query)
-        if self.text_processing is TextProcessing.Stemmer:
-            _query = stemming(input_string=normalize_query)
-        elif self.text_processing is TextProcessing.Lemmatizer:
+        # if self.text_processing is TextProcessing.Stemmer:
+        #     _query = stemming(input_string=normalize_query)
+        if self.text_processing is TextProcessing.Lemmatizer:
             _query = lemmatizing(input_string=normalize_query, nlp=self.nlp)
         else:
             _query = normalize_query
@@ -121,11 +121,11 @@ class SearchEngine:
     def index(self, url: str, content: str) -> None:
         self._documents[url] = content
         normalized_content = normalize_string(content)
-        if self.stopwords:
-            _content = remove_stopwords(input_string=normalized_content)
-        if self.text_processing is TextProcessing.Stemmer:
-            _content = stemming(input_string=normalized_content)
-        elif self.text_processing is TextProcessing.Lemmatizer:
+        # if self.stopwords:
+        #     _content = remove_stopwords(input_string=normalized_content)
+        # if self.text_processing is TextProcessing.Stemmer:
+        #     _content = stemming(input_string=normalized_content)
+        if self.text_processing is TextProcessing.Lemmatizer:
             _content = lemmatizing(input_string=normalized_content, nlp=self.nlp)
         else:
             _content = normalized_content
