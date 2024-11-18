@@ -1,18 +1,16 @@
-name: disney-movie-app
+name: disney-search-engine
+runtime: python
 type: web
-regions:
-  - fra1  # Use the closest region
+path: /app/main.py
 build:
-  type: python
-  version: "3.12.4"  
-  env:
-    - STATIC_URL=/static/
-    - CSV_FILE_PATH=/data/disney_movies_dataset.csv
-files:
-  - app/static/**          # Include all static files
-  - data/**                # Include all data files
-  - app/templates/**       # Include HTML templates
-  - app/**/*.py            # Include Python files
-  - requirements.txt       # Include dependencies
-run:
-  command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+  commands:
+    - pip install -r requirements.txt
+routes:
+  - path: /
+    methods:
+      - GET
+healthcheck:
+  type: http
+  path: /
+  interval: 5s
+  timeout: 3s
