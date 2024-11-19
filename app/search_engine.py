@@ -5,12 +5,12 @@ from enum import Enum
 from math import log
 from string import punctuation
 
-from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 
 
-def remove_stopwords(input_string: str) -> str:
-    stop_words = set(stopwords.words("english"))
+def remove_stopwords(input_string: str, nlp) -> str:
+    # Use spaCy's stop words
+    stop_words = nlp.Defaults.stop_words
     words = input_string.split()
     filtered_words = [word for word in words if word.lower() not in stop_words]
     filtered_text = " ".join(filtered_words)
@@ -121,7 +121,7 @@ class SearchEngine:
         self._documents[url] = content
         normalized_content = normalize_string(content)
         if self.stopwords:
-            _content = remove_stopwords(input_string=normalized_content)
+            _content = remove_stopwords(input_string=normalized_content, nlp=self.nlp)
         if self.text_processing is TextProcessing.Stemmer:
             _content = stemming(input_string=normalized_content)
         elif self.text_processing is TextProcessing.Lemmatizer:

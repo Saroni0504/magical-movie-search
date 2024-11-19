@@ -36,4 +36,4 @@ class TestTextProcessing:
         ("and, World", "and, World"),
     ])
     def test_remove_stopwords(self, input_text, expected_output):
-        assert remove_stopwords(input_text) == expected_output
+        assert remove_stopwords(input_text, self.nlp) == expected_output
