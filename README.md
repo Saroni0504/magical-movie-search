@@ -60,7 +60,7 @@ This application is built on Python using FastAPI, with a frontend developed in 
 - **Method:** `GET`
 - **Parameters:** 
   - `tags_n_occurences` (integer): The number of movies the tag is in 
-- **Response:** List of strings with the tags 
+- **Response:** List of the tags as strings
 
 
 
