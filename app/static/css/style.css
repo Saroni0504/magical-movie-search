@@ -4,14 +4,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     background: linear-gradient(to right, #064675, #110076);
     color: #333;
-    font-size: 16px; 
+    font-size: 16px;
 }
 
 .container {
@@ -23,10 +24,61 @@ html, body {
     text-align: center;
 }
 
+.logo-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logo {
+    max-width: 20%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.fireworks {
+    position: absolute;
+    max-width: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.logo-container:hover .fireworks {
+    opacity: 1; /* Show fireworks on hover */
+}
+
 h1 {
     color: #ffffff;
     font-size: 1.8229vw;
-    font-family: 'Satisfy', cursive;
+    font-family: "Satisfy", cursive;
+}
+
+.smaller-text {
+    font-size: 0.5729vw;
+    color: #fff;
+    font-weight: normal;
+}
+
+.no-results {
+    margin-top: 1.0417vw;
+    padding: 1.0417vw;
+    background-color: transparent;
+    border-radius: 0.5208vw;
+    color: #ffffff;
+    font-size: 0.9375vw;
+    text-align: center;
+    font-family: "Nunito", sans-serif;
+}
+
+.no-results p {
+    margin: 0;
 }
 
 .search-box {
@@ -51,7 +103,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #4a90e2; /* Added focus state for accessibility */
+    border-color: #4a90e2; 
     outline: none;
 }
 
@@ -80,7 +132,7 @@ input[type="text"]:focus {
     margin-top: 0.5208vw;
     align-items: center;
     justify-content: center;
-    /* Removed display: flex from media queries to keep it hidden until toggled */
+    /* Display controlled via JavaScript */
 }
 
 .filter-container {
@@ -96,7 +148,7 @@ input[type="text"]:focus {
     cursor: pointer;
     color: #ffffff;
     padding: 0.2083vw 0.4167vw;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .filter-menu,
@@ -110,7 +162,7 @@ input[type="text"]:focus {
     width: 7.8125vw;
     font-size: 0.7292vw;
     color: #000;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .filter-menu div,
@@ -157,7 +209,8 @@ input[type="text"]:focus {
 .tag-container {
     display: grid;
     justify-content: center;
-    gap: 0.5vw; /* Added gap for spacing */
+    gap: 0.5vw; 
+    scrollbar-width: none; 
 }
 
 .tag-container span.tag {
@@ -166,7 +219,7 @@ input[type="text"]:focus {
     border: none;
     cursor: pointer;
     color: #ffffff;
-    font-size: 0.6771vw;
+    font-size: 0.8771vw;
     font-family: Arial, sans-serif;
     position: relative;
     display: inline-block;
@@ -262,10 +315,15 @@ input[type="text"]:focus {
     box-sizing: border-box;
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+    color: #e2e2e2 !important;
+}
+
 .card {
     position: relative;
     width: 13.0208vw;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 2 / 3;
     box-shadow: 0 0.3646vw 0.5208vw rgba(0, 0, 0, 0.5);
     border-radius: 1.3021vw;
     transition: transform 0.5s ease;
@@ -286,7 +344,7 @@ input[type="text"]:focus {
     height: 100%;
     background: inherit;
     opacity: 0;
-    border-radius: 1.0417vw;
+    border-radius: 1.3021vw;
     transition: opacity 0.5s;
 }
 
@@ -301,7 +359,7 @@ input[type="text"]:focus {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Ensures the image covers the card without distortion */
-    border-radius: 1.0417vw;
+    border-radius: inherit;
 }
 
 .card .info {
@@ -322,11 +380,16 @@ input[type="text"]:focus {
     padding: 1.0417vw;
 }
 
+.card:hover .info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .card .info h1 {
     color: #fff;
     font-size: 1.0417vw;
     margin-bottom: -0.1042vw;
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .card .info h2 {
@@ -343,17 +406,6 @@ input[type="text"]:focus {
     hyphens: auto;
 }
 
-.card:hover .info {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.smaller-text {
-    font-size: 0.5729vw;
-    color: #fff;
-    font-weight: normal;
-}
-
 .card .loading-message {
     position: absolute;
     top: 50%;
@@ -366,67 +418,19 @@ input[type="text"]:focus {
     z-index: 2;
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-    color: #e2e2e2 !important;
-}
-
-.logo-container {
-    position: relative;
-    display: inline-block;
-}
-
-.logo {
-    max-width: 20%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.fireworks {
-    position: absolute;
-    max-width: 40%;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.logo-container:hover .fireworks {
-    opacity: 1; /* Show fireworks on hover */
-}
-
-.no-results {
-    margin-top: 1.0417vw;
-    padding: 1.0417vw;
-    background-color: transparent;
-    border-radius: 0.5208vw;
-    color: #ffffff;
-    font-size: 0.9375vw;
-    text-align: center;
-    font-family: 'Nunito', sans-serif;
-}
-
-.no-results p {
-    margin: 0;
-}
-
 ::-webkit-scrollbar {
     display: none;
 }
 
-.tag-container {
-    scrollbar-width: none; /* Firefox */
-}
-
-
-/* General Responsive Adjustments */
 @media (max-width: 1024px) {
+    .logo {
+        max-width: 40%;
+    }
+
+    .fireworks {
+        max-width: 60%;
+    }
+
     .container {
         max-width: 90vw;
         padding: 5vw;
@@ -442,54 +446,69 @@ input[type="text"]:focus {
 
     input[type="text"] {
         width: 80vw;
-        padding: 2vw 2vw 2vw 4vw;
+        padding: 3vw 3vw 3vw 13vw;
         font-size: 4vw;
+        border-radius: 10.0417vw;
     }
 
-    .search-icon,
+    .search-icon {
+        right: 200vw;
+        font-size: 6vw !important;
+    }
+
     .tune-icon {
-        left: 5vw;
-        right: 5vw;
-        font-size: 5vw;
+        left: 70vw;
+        right: 6vw;
+        font-size: 6vw !important;
     }
 
-    /* Removed display: flex to keep #filtersRow hidden unless toggled */
     #filtersRow {
-        flex-direction: column;
-        /* display: flex; */ /* Ensure it's hidden until triggered */
+        flex-direction: row;
+        padding: 0 1vw;
     }
 
     .filter-container {
-        margin: 1vw 0;
+        margin: 0 0.5vw;
     }
 
     .filter-button,
     .sort-button {
-        font-size: 4vw;
-        padding: 2vw 4vw;
+        font-size: 3vw;
+        padding: 1vw 2vw;
+        white-space: nowrap;
     }
 
     .filter-menu,
     .sort-menu,
     .results-menu {
-        width: 50vw;
-        font-size: 4vw;
+        width: 17vw;
+        font-size: 2vw;
+    }
+
+    .tag-container {
+        width: 100%; 
+        grid-template-columns: repeat(1, 1fr); /* Adjusted for better layout */
     }
 
     .tag-container span.tag {
-        font-size: 4vw;
-        padding: 1vw;
+        font-size: 3vw;
+        padding: 1.5vw;
+    }
+
+    .tag-container span.tag:not(:first-child)::before {
+        font-size: 2.5vw;
+        margin-right: 1vw;
     }
 
     .plus-circle {
-        width: 8vw;
-        height: 8vw;
-        font-size: 6vw;
+        width: 15px;
+        height: 15px;
+        font-size: 15px;
     }
 
     .plus-tooltip {
-        width: 20vw;
-        font-size: 4vw;
+        width: 32px;
+        font-size: 5px;
     }
 
     .swiper-container {
@@ -504,6 +523,7 @@ input[type="text"]:focus {
 
     .card {
         width: 75vw;
+        border-radius: 10.0417vw;
     }
 
     .card .info {
@@ -515,9 +535,11 @@ input[type="text"]:focus {
         font-size: 5vw;
     }
 
-    .card .info h2,
-    .card .info p {
+    .card .info h2{
         font-size: 4vw;
+    }
+    .card .info p {
+        font-size: 3.5vw;
     }
 
     .smaller-text {
@@ -525,27 +547,67 @@ input[type="text"]:focus {
     }
 
     .no-results {
-        font-size: 5vw;
-        padding: 5vw;
+        font-size: 3vw;
+        padding: 10vw 1vw;
     }
 }
 
-/* New Media Query for Tablets (768px) */
+
 @media (max-width: 768px) {
-    /* Make Plus Circle and Tooltip Smaller on 768px screens */
+    .logo {
+        max-width: 40%;
+    }
+
+    .fireworks {
+        max-width: 60%;
+    }
+
     .plus-circle {
-        width: 20px; /* Reduced from 8vw */
-        height: 20px; /* Reduced from 8vw */
-        font-size: 10px; /* Reduced from 6vw */
+        width: 15px;
+        height: 15px;
+        font-size: 15px;
     }
 
     .plus-tooltip {
-        width: 40px; /* Reduced from 20vw */
-        font-size: 8px; /* Reduced from 4vw */
+        width: 32px;
+        font-size: 5px;
+    }
+
+    .card {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info {
+        font-size: 3vw;
+        padding: 5vw;
+        border-radius: 10.0417vw;
+    }
+
+    .card img {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info h1 {
+        font-size: 5vw;
+    }
+
+    .card .info h2{
+        font-size: 4vw;
+    }
+    .card .info p {
+        font-size: 3.5vw;
+    }
+
+    .smaller-text {
+        font-size: 3.5vw;
+    }
+
+    .no-results {
+        font-size: 3vw;
+        padding: 10vw 1vw;
     }
 }
 
-/* Extra Small Devices (Phones) */
 @media (max-width: 480px) {
     .logo {
         max-width: 50%;
@@ -563,6 +625,7 @@ input[type="text"]:focus {
         width: 80vw;
         padding: 3vw 3vw 3vw 13vw;
         font-size: 4vw;
+        border-radius: 10.0417vw;
     }
 
     .search-icon {
@@ -576,22 +639,32 @@ input[type="text"]:focus {
         font-size: 6vw;
     }
 
+    #filtersRow {
+        flex-direction: row;
+        padding: 0 1vw;
+    }
+
+    .filter-container {
+        margin: 0 0.5vw;
+    }
+
     .filter-button,
     .sort-button {
-        font-size: 5vw;
-        padding: 3vw 6vw;
+        font-size: 3vw;
+        padding: 1vw 2vw;
+        white-space: nowrap;
     }
 
     .filter-menu,
     .sort-menu,
     .results-menu {
-        width: 60vw;
-        font-size: 5vw;
+        width: 17vw;
+        font-size: 2vw;
     }
 
     .tag-container {
-        width: 100%; /* Corrected from 'vw' to '100%' */
-        grid-template-columns: repeat(1, 1fr); /* Adjusted for better layout */
+        width: 100%; 
+        grid-template-columns: repeat(1, 1fr); 
     }
 
     .tag-container span.tag {
@@ -605,14 +678,14 @@ input[type="text"]:focus {
     }
 
     .plus-circle {
-        width: 15px; /* Changed from 0.6vw */
-        height: 15px; /* Changed from 0.6vw */
-        font-size: 8px; /* Changed from 0.5vw */
+        width: 15px; 
+        height: 15px; 
+        font-size: 8px; 
     }
 
     .plus-tooltip {
-        width: 32px; /* Changed from 2vw */
-        font-size: 5px; /* Changed from 0.25vw */
+        width: 32px; 
+        font-size: 5px; 
     }
 
     .card {
@@ -643,7 +716,7 @@ input[type="text"]:focus {
     }
 
     .no-results {
-        font-size: 6vw;
-        padding: 6vw;
+        font-size: 3vw;
+        padding: 10vw 1vw;
     }
 }

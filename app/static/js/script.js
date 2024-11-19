@@ -8,7 +8,7 @@ const filtersRow = document.getElementById("filtersRow");
 let selectedTag = null;  // Track selected tag
 let allTags = [];        // Store all tags from backend
 let currentTagIndex = 0; // Track the current set of displayed tags
-const TAGS_PER_BATCH = 9; // Number of tags per batch for display
+const TAGS_PER_BATCH = 7; // Number of tags per batch for display
 let currentSortingOption = "relevancy"; // Default filtering option
 let currentSortOrder = "descending"; 
 let nResultsLimit = null; 
@@ -18,32 +18,21 @@ let fetchedMovies = [];
 
 // Initialize Swiper carousel
 const swiper = new Swiper(".swiper-container", {
-    slidesPerView: "auto",   
+    slidesPerView: 1,   
     centeredSlides: true,
     centeredSlidesBounds: true,
     centerInsufficientSlides: true,
     loop: false,
     breakpoints: {
-        320: { 
+        340: { 
             slidesPerView: 1, 
-            spaceBetween: 5 
-        },
-        480: { 
-            slidesPerView: 1.2, 
             spaceBetween: 10 
         },
-        768: { 
-            slidesPerView: 2, 
-            spaceBetween: 15 
-        },
-        1024: { 
-            slidesPerView: 3, 
-            spaceBetween: 20 
-        },
-        1440: { 
+        1025: { 
             slidesPerView: 7, 
             spaceBetween: 30 
         },
+
     },
     navigation: {
         nextEl: ".swiper-button-next",
