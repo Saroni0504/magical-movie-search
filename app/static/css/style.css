@@ -39,7 +39,7 @@ body {
 .fireworks {
     position: absolute;
     max-width: 40%;
-    top: 50%;
+    top: 47%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
@@ -159,7 +159,7 @@ input[type="text"]:focus {
     border: 0.0521vw solid #ddd;
     box-shadow: 0 0.2083vw 0.4167vw rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    width: 7.8125vw;
+    width: 8.2vw;
     font-size: 0.7292vw;
     color: #000;
     font-family: "Nunito", sans-serif;
