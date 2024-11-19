@@ -1,388 +1,722 @@
-body, html {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #b3cde0, #dec1ff); /* Soft pastel blue to lavender gradient */
+    font-family: "Nunito", sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    background: linear-gradient(to right, #064675, #110076);
     color: #333;
-    height: 100%; /* Ensure full height */
+    font-size: 16px;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 41.6667vw;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f6f6ff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1.0417vw;
+    background-color: transparent;
+    border-radius: 0.5208vw;
     text-align: center;
 }
 
+.logo-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logo {
+    max-width: 20%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.fireworks {
+    position: absolute;
+    max-width: 40%;
+    top: 47%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.logo-container:hover .fireworks {
+    opacity: 1; /* Show fireworks on hover */
+}
+
 h1 {
-    color: #444;
+    color: #ffffff;
+    font-size: 1.8229vw;
+    font-family: "Satisfy", cursive;
+}
+
+.smaller-text {
+    font-size: 0.5729vw;
+    color: #fff;
+    font-weight: normal;
+}
+
+.no-results {
+    margin-top: 1.0417vw;
+    padding: 1.0417vw;
+    background-color: transparent;
+    border-radius: 0.5208vw;
+    color: #ffffff;
+    font-size: 0.9375vw;
+    text-align: center;
+    font-family: "Nunito", sans-serif;
+}
+
+.no-results p {
+    margin: 0;
 }
 
 .search-box {
-    margin: 20px 0;
+    margin: 1.0417vw 0;
 }
 
-/* Align inputs and button for Top Movies in a row */
 .search-box-inline {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px; /* Add space between elements */
-    margin-bottom: 10px;
-}
-
-.search-box h2 {
-    margin-bottom: 10px;
+    position: relative;
 }
 
 input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 60%;
+    padding: 0.5208vw 0.5208vw 0.5208vw 2.3438vw;
+    font-size: 0.8333vw;
+    border: 0.1042vw solid #ddd;
+    border-radius: 1.0417vw;
+    width: 33.3333vw;
+    transition: border-color 0.3s;
+    color: #0e0e0e;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #6fa3ef; /* Light blue button */
-    color: #fff;
-    border-radius: 5px;
+input[type="text"]:focus {
+    border-color: #4a90e2; 
+    outline: none;
+}
+
+.search-icon,
+.tune-icon {
+    position: absolute;
+    font-size: 1.25vw;
+    color: #9b9b9c;
     cursor: pointer;
-    height: 40px; /* Match button height with input field */
-    margin-left: 2px;
-    
 }
 
-button:hover {
-    background-color: #4a90e2; /* Slightly darker blue on hover */
-    transform: scale(1.05);
+.search-icon {
+    left: 3.7vw;
 }
 
-/* Styles for the filter button */
-.filter-button {
-    display: flex;
+.tune-icon {
+    right: 3.7vw;
+}
+
+.tune-icon:hover {
+    color: #4a90e2;
+}
+
+#filtersRow {
+    display: none; /* Remains hidden initially */
+    margin-top: 0.5208vw;
     align-items: center;
     justify-content: center;
-    background-color: #6fa3ef;
-    padding: 0;
-    margin-left: 1px;
-    border-radius: 5px;
-    height: 40px; /* Match filter button height with input field */
-    width: 30px; /* Keep the filter button square */
-}
-.filter-button img{
-    width: 17px;
-    height: 17px;
-}
-.filter-button:hover {
-    background-color: #4a90e2; /* Slightly darker blue on hover */
-    transform: scale(1.1);
+    /* Display controlled via JavaScript */
 }
 
-.filter-tooltip{
-    width: 40px; /* Width of the tooltip */
-    padding: 1px; /* Some padding */
-    background-color: #ffffff; /* Dark background */
-    color: #6fa3ef; /* White text */
-    font-size: 10px;
-    font-weight: bold;
-    text-align: center; /* Center the text */
-    border-radius: 5px; /* Rounded corners */
-    position: absolute; /* Absolute positioning */
-    bottom: -45%; 
-    left: 50%; /* Center it horizontally */
-    transform: translateX(-50%); /* Adjust for centering */
-    transition: opacity 0.3s; /* Fade effect */
-    z-index: 1; 
-}
-
-/* Ensure the filters row is right under the search bar */
-#filtersRow {
-    display: none;
-    margin-top: 10px;  /* Space between the search box and filters */
-    align-items: center;  /* Center the filters under the search bar */
-    margin-left: 6%; /* Align filters with the start of the text input */
-    gap: 10px;  /* Space between filters */
-    position: relative;  
-}
-
-/* Style for the filter dropdown */
-#filtersRow select {
-    width: 120px;
-    padding: 4px 0px 8px 8px; /* Adjusted right padding */
-    font-size: 15px;
-    border-radius: 5px;
-    border: none; /* No border */
-    background-color: #f6f6ff; /* Match the container's background */
-    color: #444444d6;  /* Text color */
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out; /* Smooth hover effect */
-}
-
-
-/* Enlarge the dropdown on hover */
-#filtersRow select:hover {
-    color: black;
-}
-
-
-.title {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: left;
-}
-
-/* Carousel styles */
-.carousel-wrapper {
+.filter-container {
+    margin: 0 0.2604vw;
     position: relative;
-    width: 100%;
-    max-width: 800px;
-    overflow: hidden;
-    margin: 20px auto;
 }
 
-.carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 20px;
-    background-color: #fbf7ff;
-    border: 1px solid #f8f8fb;
-    border-radius: 5px;
-    text-align: left;
-}
-
-.carousel-control {
-    position: absolute;
-    top: 50%;
-    background-color: rgb(0 0 0 / 21%);
-    color: white;
+.filter-button,
+.sort-button {
+    background: transparent;
     border: none;
-    padding: 10px;
-    font-size: 18px;
+    font-size: 0.7813vw;
     cursor: pointer;
-    z-index: 1;
+    color: #ffffff;
+    padding: 0.2083vw 0.4167vw;
+    font-family: "Nunito", sans-serif;
 }
 
-.carousel-control.prev {
-    left: 0;
-    background-color: rgb(0 0 0 / 21%);
+.filter-menu,
+.sort-menu {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0521vw solid #ddd;
+    box-shadow: 0 0.2083vw 0.4167vw rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 8.2vw;
+    font-size: 0.7292vw;
+    color: #000;
+    font-family: "Nunito", sans-serif;
 }
 
-.carousel-control.next {
-    right: 0;
-    background-color: rgb(0 0 0 / 21%);
+.filter-menu div,
+.sort-options div,
+.sort-order div {
+    padding: 0.4167vw 0.8333vw;
+    cursor: pointer;
 }
 
-.movie-title {
+.filter-menu div.active,
+.sort-options div.active,
+.sort-order div.active {
     font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 10px;
+    color: #000;
 }
 
-.movie-image {
-    width: 100%; /* Adjust width to fill the container */
-    height: auto; /* Keep aspect ratio */
+.filter-menu div.active::before,
+.sort-options div.active::before,
+.sort-order div.active::before {
+    content: "●";
+    color: #000;
+    margin-right: 0.2604vw;
 }
 
-.movie-release {
-    margin-bottom: 20px; /* Adjust the value to control the space */
+.sort-menu hr {
+    margin: 0.2083vw 0;
+    border: none;
+    border-top: 0.0521vw solid #ddd;
 }
 
-.movie-genre, .movie-tags {
-    font-style: italic;
-    margin-bottom: 10px;
-    margin-top: 10px;
+.triangle {
+    font-size: 0.6em;
+    display: inline-block;
+    transform: scale(1.3, 0.7);
 }
 
-.movie-summary {
-    margin-top: 10px;
-}
-
-/* New styles for movie presentation */
-.movie-container {
-    display: flex; /* Use flexbox for horizontal layout */
-    align-items: flex-start; /* Align items to the start */
-    padding: 20px; /* Padding around the movie container */
-    border-bottom: 1px solid #fffcfc; /* Divider between movies */
-}
-
-.movie-image-container {
-    flex: 1; /* Take up 1 part of the available space */
-    padding: 0; /* Remove padding inside the image container */
-    border: 2px solid black; /* Change frame color to black */
-    border-radius: 10px; /* Rounded corners */
-    overflow: hidden; /* Hide overflow */
-    display: flex; /* Use flexbox to center the image */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-}
-
-.movie-image-container img {
-    width: 100%; /* Set image width to 100% of the container */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove bottom space (if any) */
-}
-
-.movie-details {
-    flex: 2; /* Take up 2 parts of the available space */
-    padding: 10px; /* Padding inside the details */
-    text-align: left; /* Align text to the left */
-}
-
-/* Add this CSS to control the logo size */
-.logo {
-    max-width: 20%; /* Set a maximum width relative to the container */
-    height: auto; /* Keep the aspect ratio */
-    margin: 0 auto; /* Center the logo horizontally */
-    display: block; /* Ensure it's treated as a block element for centering */
-}
-
-/* Adjustments for mobile responsiveness */
-@media (max-width: 600px) {
-    .logo {
-        max-width: 40%; /* Increase size on smaller screens */
-    }
-}
-
-/* Container for tags and Show More button */
 .tag-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center the tags horizontally */
-    margin-top: 15px;
-    margin-bottom: 20px;
+    align-items: center;
+    margin: 0.7813vw 0 1.0417vw;
 }
 
-/* Center the tags in the row */
 .tag-container {
-    display: flex;
-    justify-content: center; /* Center the tags */
-    flex-wrap: wrap; /* Allow tags to wrap to the next line if necessary */
+    display: grid;
+    justify-content: center;
+    gap: 0.5vw; 
+    scrollbar-width: none; 
 }
 
-/* Individual tag styling */
 .tag-container span.tag {
-    padding: 5px 5px;
-    background-color: transparent; /* No background color */
-    border: none; /* No border */
+    padding: 0.2604vw;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
+    color: #ffffff;
+    font-size: 0.8771vw;
+    font-family: Arial, sans-serif;
+    position: relative;
     display: inline-block;
-    color: #988e8e; /* Text color */
-    font-size: 13px;
-    font-weight: bold;
-    position: relative; /* Position relative for separator placement */
 }
 
-
-.tag-container span.tag:active{
-    color: black
-}
-
-.tag-container span.tag:hover{
-    color: black
-}
-
+.tag-container span.tag:active,
 .tag-container span.tag.active-tag {
-    color: black;  /* Change to your desired active text color */
+    font-weight: bold;
 }
 
-/* Dot separator styling */
+.tag-container span.tag.previously-selected {
+    color: #ffffff;
+}
+
 .tag-container span.tag:not(:first-child)::before {
-    content: "●"; /* Cute circle separator */
-    color: #6fa3ef; /* Circle color */
-    margin-right: 10px; /* Space between dot and tag */
-    margin-bottom: 3px;
-    font-size: 15px; /* Adjust size of the circle */
-    display: inline-block; /* Ensure it behaves like inline */
-    vertical-align: middle; /* Align vertically with the text */
+    content: "●";
+    color: #ffffff;
+    margin-right: 0.5208vw;
+    font-size: 0.7813vw;
+    vertical-align: middle;
 }
 
-
-/* Tooltip container */
 .tooltip-container {
-    position: relative; /* Position for the tooltip */
-    display: inline-block; /* Inline block for proper placement */
+    position: relative;
+    display: inline-block;
 }
 
-/* Circle style for the plus sign */
 .plus-circle {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the plus sign */
-    width: 20px; /* Width of the circle */
-    height: 20px; /* Height of the circle */
-    border-radius: 50%; /* Make it circular */
-    background-color: #6fa3ef; /* Blue color for the circle */
-    color: white; /* White color for the plus sign */
-    font-weight: bold; /* Make the plus sign bold */
-    font-size: 14px; /* Size of the plus sign */
-    transition: transform 0.2s; /* Smooth transition for hover effect */
-    cursor: pointer; /* Change cursor to pointer */
-    margin-top: 10px;
-    margin-bottom: 30px;
+    justify-content: center;
+    width: 1.0417vw;
+    height: 1.0417vw;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #000;
+    font-weight: bold;
+    font-size: 0.7813vw;
+    cursor: pointer;
+    margin: 0.5208vw 0 1.5625vw;
+    transition: transform 0.2s;
 }
 
-.plus-tooltip{
-    width: 70px; /* Width of the tooltip */
-    background-color: #ffffff; /* Dark background */
-    color: #6fa3ef; /* White text */
-    font-size: 8px;
-    text-align: center; /* Center the text */
-    border-radius: 5px; /* Rounded corners */
-    padding: 2px; /* Padding */
-    position: absolute; /* Absolute positioning */
-    z-index: 1; 
-    bottom: -125%; /* Position under the circle */
-    left: 50%; /* Center it horizontally */
-    transform: translateX(-50%); /* Adjust for centering */
-    opacity: 0; /* Make it transparent */
-    transition: opacity 0.3s; /* Fade effect */
-}
-
-/* Hover effect for the plus circle */
 .plus-circle:hover {
-    transform: scale(1.4); /* Enlarge on hover */
+    transform: scale(1.4);
 }
 
-/* Tooltip styles */
-.tooltip{
-    visibility: hidden; /* Hide by default */
+.plus-tooltip {
+    visibility: hidden;
+    width: 3.6458vw;
+    background-color: #ffffff;
+    color: #000;
+    font-size: 0.4167vw;
+    text-align: center;
+    border-radius: 0.2604vw;
+    padding: 0.1042vw;
+    position: absolute;
+    z-index: 1;
+    bottom: -125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-/* Show the tooltip on hover */
-.filter-button:hover .tooltip,
-.plus-circle:hover .tooltip {
-    visibility: visible; /* Show the tooltip */
-    opacity: 1; /* Fully visible */
+.plus-circle:hover .plus-tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
-/* Tooltip icon style */
 .tooltip-icon {
-    width: 16px; /* Adjust icon size */
-    height: 16px; /* Adjust icon size */
-    margin-left: 5px; /* Space between text and icon */
-    vertical-align: middle; /* Align vertically */
+    width: 0.8333vw;
+    height: 0.8333vw;
+    margin-left: 0.2604vw;
+    vertical-align: middle;
+}
+
+.swiper-container {
+    width: 250%;
+    height: 46.2963vh;
+    margin-left: -75%;
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.swiper-slide {
+    width: 30%;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: #e2e2e2 !important;
+}
+
+.card {
+    position: relative;
+    width: 13.0208vw;
+    aspect-ratio: 2 / 3;
+    box-shadow: 0 0.3646vw 0.5208vw rgba(0, 0, 0, 0.5);
+    border-radius: 1.3021vw;
+    transition: transform 0.5s ease;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(59, 72, 164, 0.6) 1%, rgba(94, 186, 180, 0.9) 98%);
+}
+
+.card:hover {
+    transform: translateY(0.5208vw);
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    opacity: 0;
+    border-radius: 1.3021vw;
+    transition: opacity 0.5s;
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the card without distortion */
+    border-radius: inherit;
+}
+
+.card .info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(2.0833vw);
+    transition: opacity 0.5s, transform 0.5s;
+    user-select: none;
+    overflow-y: auto; /* Enable vertical scrolling */
+    font-size: 0.7292vw;
+    text-align: left;
+    padding: 1.0417vw;
+}
+
+.card:hover .info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card .info h1 {
+    color: #fff;
+    font-size: 1.0417vw;
+    margin-bottom: -0.1042vw;
+    font-family: "Nunito", sans-serif;
+}
+
+.card .info h2 {
+    color: #fff;
+    font-size: 0.6771vw;
+    margin: 0.4167vw 0;
+}
+
+.card .info p {
+    font-size: 0.625vw;
+    margin: 0.4167vw 0;
+    text-align: justify;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.card .loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8333vw;
+    color: #fff;
+    text-align: center;
+    display: none;
+    z-index: 2;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .logo {
+        max-width: 40%;
+    }
+
+    .fireworks {
+        max-width: 60%;
+    }
+
+    .container {
+        max-width: 90vw;
+        padding: 5vw;
+    }
+
+    h1 {
+        font-size: 5vw;
+    }
+
+    .search-box-inline {
+        flex-direction: column;
+    }
+
+    input[type="text"] {
+        width: 80vw;
+        padding: 3vw 3vw 3vw 13vw;
+        font-size: 4vw;
+        border-radius: 10.0417vw;
+    }
+
+    .search-icon {
+        right: 200vw;
+        font-size: 6vw !important;
+    }
+
+    .tune-icon {
+        left: 70vw;
+        right: 6vw;
+        font-size: 6vw !important;
+    }
+
+    #filtersRow {
+        flex-direction: row;
+        padding: 0 1vw;
+    }
+
+    .filter-container {
+        margin: 0 0.5vw;
+    }
+
+    .filter-button,
+    .sort-button {
+        font-size: 3vw;
+        padding: 1vw 2vw;
+        white-space: nowrap;
+    }
+
+    .filter-menu,
+    .sort-menu,
+    .results-menu {
+        width: 17vw;
+        font-size: 2vw;
+    }
+
+    .tag-container {
+        width: 100%; 
+        grid-template-columns: repeat(1, 1fr); /* Adjusted for better layout */
+    }
+
+    .tag-container span.tag {
+        font-size: 3vw;
+        padding: 1.5vw;
+    }
+
+    .tag-container span.tag:not(:first-child)::before {
+        font-size: 2.5vw;
+        margin-right: 1vw;
+    }
+
+    .plus-circle {
+        width: 15px;
+        height: 15px;
+        font-size: 15px;
+    }
+
+    .plus-tooltip {
+        width: 32px;
+        font-size: 5px;
+    }
+
+    .swiper-container {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+    }
+
+    .swiper-slide {
+        width: 80vw;
+    }
+
+    .card {
+        width: 75vw;
+        border-radius: 10.0417vw;
+    }
+
+    .card .info {
+        font-size: 4vw;
+        padding: 4vw;
+    }
+
+    .card .info h1 {
+        font-size: 5vw;
+    }
+
+    .card .info h2{
+        font-size: 4vw;
+    }
+    .card .info p {
+        font-size: 3.5vw;
+    }
+
+    .smaller-text {
+        font-size: 3.5vw;
+    }
+
+    .no-results {
+        font-size: 3vw;
+        padding: 10vw 1vw;
+    }
 }
 
 
-/* Adjustments for mobile responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .logo {
+        max-width: 40%;
+    }
+
+    .fireworks {
+        max-width: 60%;
+    }
+
+    .plus-circle {
+        width: 15px;
+        height: 15px;
+        font-size: 15px;
+    }
+
+    .plus-tooltip {
+        width: 32px;
+        font-size: 5px;
+    }
+
+    .card {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info {
+        font-size: 3vw;
+        padding: 5vw;
+        border-radius: 10.0417vw;
+    }
+
+    .card img {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info h1 {
+        font-size: 5vw;
+    }
+
+    .card .info h2{
+        font-size: 4vw;
+    }
+    .card .info p {
+        font-size: 3.5vw;
+    }
+
+    .smaller-text {
+        font-size: 3.5vw;
+    }
+
+    .no-results {
+        font-size: 3vw;
+        padding: 10vw 1vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        max-width: 50%;
+    }
+
+    .fireworks {
+        max-width: 60%;
+    }
+
+    h1 {
+        font-size: 8vw;
+    }
+
+    input[type="text"] {
+        width: 80vw;
+        padding: 3vw 3vw 3vw 13vw;
+        font-size: 4vw;
+        border-radius: 10.0417vw;
+    }
+
+    .search-icon {
+        right: 200vw;
+        font-size: 6vw;
+    }
+
+    .tune-icon {
+        left: 70vw;
+        right: 6vw;
+        font-size: 6vw;
+    }
+
+    #filtersRow {
+        flex-direction: row;
+        padding: 0 1vw;
+    }
+
+    .filter-container {
+        margin: 0 0.5vw;
+    }
+
+    .filter-button,
+    .sort-button {
+        font-size: 3vw;
+        padding: 1vw 2vw;
+        white-space: nowrap;
+    }
+
+    .filter-menu,
+    .sort-menu,
+    .results-menu {
+        width: 17vw;
+        font-size: 2vw;
+    }
+
     .tag-container {
-        flex-direction: column; /* Stack tags vertically on smaller screens */
+        width: 100%; 
+        grid-template-columns: repeat(1, 1fr); 
+    }
+
+    .tag-container span.tag {
+        font-size: 3vw;
+        padding: 1.5vw;
+    }
+
+    .tag-container span.tag:not(:first-child)::before {
+        font-size: 3vw;
+        margin-right: 1vw;
+    }
+
+    .plus-circle {
+        width: 15px; 
+        height: 15px; 
+        font-size: 8px; 
+    }
+
+    .plus-tooltip {
+        width: 32px; 
+        font-size: 5px; 
+    }
+
+    .card {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info {
+        font-size: 3vw;
+        padding: 5vw;
+        border-radius: 10.0417vw;
+    }
+
+    .card img {
+        border-radius: 10.0417vw;
+    }
+
+    .card .info h1 {
+        font-size: 6vw;
+    }
+
+    .card .info h2,
+    .card .info p {
+        font-size: 3.5vw;
+    }
+
+    .smaller-text {
+        font-size: 3.5vw;
+    }
+
+    .no-results {
+        font-size: 3vw;
+        padding: 10vw 1vw;
     }
 }

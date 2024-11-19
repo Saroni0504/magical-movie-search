@@ -33,16 +33,6 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --max-complexity=10 --max-line-length=100 --statistics
 
-    - name: Download NLTK wordnet
-      env:
-        NLTK_DATA: /home/runner/nltk_data
-      run: |
-        mkdir -p $NLTK_DATA
-        python -c "import nltk"
-        python -m nltk.downloader -d $NLTK_DATA wordnet
-        python -m nltk.downloader -d $NLTK_DATA stopwords
-        python -m nltk.downloader -d $NLTK_DATA averaged_perceptron_tagger_eng
-
     - name: Test with pytest
       run: |
         pytest

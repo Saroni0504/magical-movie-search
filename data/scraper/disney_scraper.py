@@ -22,7 +22,9 @@ from data.constants import (
 )
 from data.logger import logger
 from data.utils import (
+    formatted_running_time,
     image_exists_in_dir,
+    infobox_number_parser,
     retry,
     RetryError,
 )
@@ -85,6 +87,13 @@ def create_disney_dataset(records_limit=1_000):
             header=header,
             output_format=output_format,
         )
+    # Parsing box office and budget
+    data[["box_office", "budget"]] = data[["box_office", "budget"]].apply(infobox_number_parser)
+    # calculating profit
+    data["profit"] = data["box_office"] - data["budget"]
+    # Reformatting the running time
+    data = data.rename(columns={"running_time": "running_time_minutes"})
+    data["running_time_minutes"] = data["running_time_minutes"].apply(formatted_running_time)
 
     data.to_csv(f"{DATASET_PATH}/{DATASET_NAME}_scrape.csv", index=False)
 

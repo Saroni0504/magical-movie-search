@@ -3,63 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disney Movie Recommender</title>
+    <title>Magical Movie Search</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="icon" type="image/png" href="/static/images/disney_logo.png">
+    <link rel="icon" type="image/png" href="https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/main/app/static/images/disney_logo_icon.png">
+    <!-- Material Icons and fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Satisfy&family=Nunito&display=swap" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
 </head>
 <body>
     <div class="container">
-
-        <!-- Add image at the top -->
-        <img src="/static/images/disney_logo.png" alt="Disney Logo" class="logo">
-
-        <h1>Disney Movie Recommender</h1>
+        <div class="logo-container">
+            <img src="https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/main/app/static/images/disney_logo.png" alt="Disney Logo" class="logo">
+            <div class="fireworks">
+                <img src="https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/main/app/static/images/fireworks.gif" alt="Fireworks" class="fireworks">
+            </div>
+        </div>
+        <h1>Magical Movie Search</h1>
 
         <div class="search-box">
             <div class="search-box-inline">
-                <input type="text" id="searchText" placeholder="Enter text to find a movie">
-                
-                <!-- Filters button on the right side of the search button -->
-                <div class="tooltip-container">
-                    <div class="filter-button" onclick="toggleFilters()">
-                        <img src="/static/images/filter-icon.png" alt="Icon" class="image-button">
-                        <span class="tooltip filter-tooltip">Filters</span>
+                <span class="material-icons search-icon">search</span>
+                <input type="text" id="searchText" placeholder="What do you want to watch?" onkeyup="checkEnter(event)">
+                <span class="material-icons tune-icon" onclick="toggleFilters()">tune</span>
+            </div>
+        
+            <div class="filters-row" id="filtersRow">
+                <div class="filter-container" id="date-filter-container">
+                    <button class="filter-button" onclick="toggleDateMenu()">Date Filter <span class="triangle">&#9660;</span></button>
+                    <div class="filter-menu" id="dateMenu">
+                        <div class="sort-options">
+                            <div onclick="setDateFilter('all_years')">All years</div>
+                            <div onclick="setDateFilter('past_decade')">Past decade</div>
+                            <div onclick="setDateFilter('past_year')">Past year</div>
+                        </div>
                     </div>
                 </div>
-        
-                <button onclick="searchMovie()">Search Movies</button>
-            </div>
-            
-            <!-- Filters row (initially hidden) -->
-            <div class="filters-row" id="filtersRow">
-                <select id="date-filter" name="date-filter">
-                    <option value="all_years">All years</option>
-                    <option value="past_year">Past year</option>
-                    <option value="past_decade">Past decade</option>
-                </select>
+
+                <div class="filter-container" id="sorting-container">
+                    <button class="sort-button" onclick="toggleSortMenu()">Sort by <span class="triangle">&#9660;</span></button>
+                    <div class="sort-menu" id="sortMenu">
+                        <div class="sort-options">
+                            <div onclick="sortBy('relevancy')">Relevancy</div> 
+                            <div onclick="sortBy('release_date')">Date</div>
+                            <div onclick="sortBy('budget')">Budget</div>
+                            <div onclick="sortBy('box_office')">Box Office</div>
+                            <div onclick="sortBy('profit')">Profit</div>
+                        </div>
+                        <hr>
+                        <div class="sort-order">
+                            <div onclick="setSortOrder('ascending')">Ascending</div>
+                            <div onclick="setSortOrder('descending')">Descending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-container" id="n-results-container">
+                    <button class="filter-button" onclick="toggleResultsMenu()">Number of results <span class="triangle">&#9660;</span></button>
+                    <div class="filter-menu" id="resultsMenu">
+                        <div class="sort-options">
+                            <div onclick="setResultsLimit('all')">All</div>
+                            <div onclick="setResultsLimit('10')">10</div>
+                            <div onclick="setResultsLimit('20')">20</div>
+                            <div onclick="setResultsLimit('50')">50</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-container">
+                    <button class="filter-button" onclick="showAllMovies()">Show all Movies</button>
+                </div>
             </div>
         </div>
 
-        <!-- Tags and Show More container -->
         <div class="tag-wrapper">
             <div class="tag-container">
                 <!-- Tags will be dynamically generated here -->
             </div>
             <div class="tooltip-container">
                 <div class="plus-circle" onclick="showMoreTags()">
-                    +<span class="tooltip plus-tooltip">New Ideas<img src="/static/images/new-ideas-icon.png" alt="Icon" class="tooltip-icon"></span>
+                    +<span class="tooltip plus-tooltip">New Ideas<img src="https://media.githubusercontent.com/media/Saroni0504/magical-movie-search/refs/heads/main/app/static/images/new-ideas-icon.png" alt="Icon" class="tooltip-icon"></span>
                 </div>
             </div>
         </div>
 
-        <!-- Carousel for displaying movie results -->
-        <div class="carousel-wrapper">
-            <button class="carousel-control prev" onclick="prevSlide()">❮</button>
-            <div class="carousel" id="carousel"></div>
-            <button class="carousel-control next" onclick="nextSlide()">❯</button>
+        <!-- Swiper Carousel -->
+        <div class="swiper-container" id="swiperContainer">
+            <div class="swiper-wrapper" id="carousel">
+                <!-- Dynamic slides will be inserted here by JavaScript -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+
+        <div id="noResultsMessage" class="no-results" style="display: none;">
+            <p>No movies found for your search. Please try broadening your search.</p>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>
