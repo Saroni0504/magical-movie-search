@@ -1,4 +1,6 @@
 BASE_URL = "https://en.wikipedia.org"
+DATASET_NAME = "disney_movies_dataset"
+DATASET_PATH = "data"
 DATASET_GITHUB = (
     "https://media.githubusercontent.com/media/"
     "Saroni0504/magical-movie-search/refs/heads/main/data/disney_movies_dataset.csv"
